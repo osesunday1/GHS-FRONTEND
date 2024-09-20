@@ -1,9 +1,9 @@
 import styled from 'styled-components';
-import pdfMake from 'pdfmake/build/pdfmake';
-import pdfFonts from 'pdfmake/build/vfs_fonts';
+//import pdfMake from 'pdfmake/build/pdfmake';
+//import pdfFonts from 'pdfmake/build/vfs_fonts';
 import base64Logo from './CompLogo'; // Import the base64 encoded image
 
-pdfMake.vfs = pdfFonts.pdfMake.vfs;
+//pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 const InvoiceContainer = styled.div`
   padding: 20px;
@@ -95,6 +95,8 @@ const DownloadButton = styled.button`
 `;
 
 const ConsumptionInvoice = ({ consumption }) => {
+  
+  {/* 
   const downloadPDF = () => {
     const pdfContent = [
       {
@@ -198,7 +200,7 @@ const ConsumptionInvoice = ({ consumption }) => {
     
     pdfMake.createPdf(documentDefinition).download(`invoice-${consumption._id}.pdf`);
   };
-
+*/}
   return (
     <InvoiceContainer id="invoice">
       <Header>
@@ -256,7 +258,7 @@ const ConsumptionInvoice = ({ consumption }) => {
         </TotalColumn>
       </TotalSection>
 
-      <DownloadButton onClick={downloadPDF}>Download PDF</DownloadButton>
+      <DownloadButton >Download PDF</DownloadButton>
     </InvoiceContainer>
   );
 };
