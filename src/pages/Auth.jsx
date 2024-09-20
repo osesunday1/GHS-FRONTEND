@@ -229,7 +229,7 @@ const Auth = () => {
               name="name"
               value={state.name}
               onChange={handleInputChange}
-              placeholder="First Name"
+              placeholder="Name"
               required
             />
             {state.errors.name && <p style={{ color: 'red' }}>{state.errors.name}</p>}
