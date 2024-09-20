@@ -66,13 +66,11 @@ const StyledSwitch = styled.div`
 
 // Initial state for the form
 const initialState = {
-    fname: '',     // First Name
-    lname: '',     // Last Name
+    name: '',     // First Name
     email: '',     // Stores the email input value
     password: '',  // Stores the password input value
     errors: {   
-      fname: '',
-      lname: '',
+      name: '',
       email: '',
       password: ''
     }
@@ -85,7 +83,7 @@ function formReducer(state, action) {
     case 'SET_INPUT':
       return {
         ...state,
-        [action.field]: action.value, // Updates the specific field (fname, lname, email, password)
+        [action.field]: action.value, // Updates the specific field (name,  email, password)
         errors: {
           ...state.errors,
           [action.field]: '' // Resets the error for that field when user is typing
@@ -117,17 +115,11 @@ const Auth = () => {
     const validateForm = () => {
       let isValid = true;
 
-      // If Sign Up (show fname and lname fields)
+      // If Sign Up (show name fields)
       if (!isSwitch) {
         // Check for first name
-        if (!state.fname) {
-          dispatch({ type: 'SET_ERROR', field: 'fname', error: 'First name is required' });
-          isValid = false;
-        }
-
-        // Check for last name
-        if (!state.lname) {
-          dispatch({ type: 'SET_ERROR', field: 'lname', error: 'Last name is required' });
+        if (!state.name) {
+          dispatch({ type: 'SET_ERROR', field: 'name', error: 'First name is required' });
           isValid = false;
         }
       }
@@ -182,8 +174,7 @@ const Auth = () => {
           // If sign-up (isSwitch === false), handle differently
           else {
             const response = await axios.post('https://ghsapartment-8b6109df7c25.herokuapp.com/api/v1/users/signup', {
-              fname: state.fname,
-              lname: state.lname,
+              name: state.name,
               email: state.email,
               password: state.password,
               passwordConfirm: state.password
@@ -235,23 +226,13 @@ const Auth = () => {
             <>
             <StyledInput
               type="text"
-              name="fname"
-              value={state.fname}
+              name="name"
+              value={state.name}
               onChange={handleInputChange}
               placeholder="First Name"
               required
             />
-            {state.errors.fname && <p style={{ color: 'red' }}>{state.errors.fname}</p>}
-
-            <StyledInput
-              type="text"
-              name="lname"
-              value={state.lname}
-              onChange={handleInputChange}
-              placeholder="Last Name"
-              required
-            />
-            {state.errors.lname && <p style={{ color: 'red' }}>{state.errors.lname}</p>}
+            {state.errors.name && <p style={{ color: 'red' }}>{state.errors.name}</p>}
             </>
           }
 
