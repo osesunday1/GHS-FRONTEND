@@ -1,10 +1,9 @@
 import { createContext, useReducer, useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import jwtDecode from 'jwt-decode'; // Optional to decode the token and check expiration
 
-// Create the AuthContext
 const AuthContext = createContext();
 
-// Reducer function to manage authentication state
 const authReducer = (state, action) => {
   switch (action.type) {
     case 'LOGIN':
@@ -26,33 +25,44 @@ const authReducer = (state, action) => {
   }
 };
 
-// Initial state for the auth context
 const initialState = {
   user: null,
   token: null,
   isAuthenticated: false,
 };
 
-// AuthProvider component to wrap the app
 export const AuthProvider = ({ children }) => {
   const [state, dispatch] = useReducer(authReducer, initialState);
-  const [loading, setLoading] = useState(true); // Track the loading state
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
-  // Save token to localStorage on login
+  // Check if token is still valid
+  const isTokenValid = (token) => {
+    try {
+      const decodedToken = jwtDecode(token); // decode the token to get its expiry
+      return decodedToken.exp * 1000 > Date.now(); // check if token is still valid
+    } catch (error) {
+      return false; // If there's an error decoding the token, consider it invalid
+    }
+  };
+
   useEffect(() => {
     const token = localStorage.getItem('token');
     const user = JSON.parse(localStorage.getItem('user'));
-    if (token && user) {
+
+    // Ensure the token exists and is valid
+    if (token && user && isTokenValid(token)) {
       dispatch({
         type: 'LOGIN',
         payload: { token, user },
       });
+    } else {
+      // If token is invalid or doesn't exist, ensure the user is logged out
+      dispatch({ type: 'LOGOUT' });
     }
-    setLoading(false); // Indicate that loading is done
+    setLoading(false);
   }, []);
 
-  // Login function to set user and token
   const login = (user, token) => {
     localStorage.setItem('token', token);
     localStorage.setItem('user', JSON.stringify(user));
@@ -63,7 +73,6 @@ export const AuthProvider = ({ children }) => {
     navigate('/dashboard');
   };
 
-  // Logout function to clear the token and user
   const logout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
@@ -72,7 +81,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   if (loading) {
-    return <div>Loading...</div>; // Or a spinner, to avoid rendering before checking auth state
+    return <div>Loading...</div>; // Or a spinner
   }
 
   return (
@@ -82,5 +91,4 @@ export const AuthProvider = ({ children }) => {
   );
 };
 
-// Custom hook to use the AuthContext
 export const useAuth = () => useContext(AuthContext);
