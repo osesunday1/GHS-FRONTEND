@@ -1,4 +1,4 @@
-import { createContext, useReducer, useContext, useEffect } from 'react';
+import { createContext, useReducer, useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 // Create the AuthContext
@@ -36,6 +36,7 @@ const initialState = {
 // AuthProvider component to wrap the app
 export const AuthProvider = ({ children }) => {
   const [state, dispatch] = useReducer(authReducer, initialState);
+  const [loading, setLoading] = useState(true); // Track the loading state
   const navigate = useNavigate();
 
   // Save token to localStorage on login
@@ -48,6 +49,7 @@ export const AuthProvider = ({ children }) => {
         payload: { token, user },
       });
     }
+    setLoading(false); // Indicate that loading is done
   }, []);
 
   // Login function to set user and token
@@ -68,6 +70,10 @@ export const AuthProvider = ({ children }) => {
     dispatch({ type: 'LOGOUT' });
     navigate('/login');
   };
+
+  if (loading) {
+    return <div>Loading...</div>; // Or a spinner, to avoid rendering before checking auth state
+  }
 
   return (
     <AuthContext.Provider value={{ ...state, login, logout }}>
