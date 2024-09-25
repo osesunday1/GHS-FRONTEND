@@ -5,6 +5,8 @@ import { AuthContext} from '../context/auth-context'
 import axios from 'axios'; 
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useNavigate } from 'react-router-dom'; // 
+
 
 const StyledContainer= styled.div`
 width: 100vw;
@@ -110,6 +112,8 @@ const Auth = () => {
   const auth = useContext(AuthContext);
     const [state, dispatch] = useReducer(formReducer, initialState);
     const [isSwitch, setIsSwitch] = useState(true);
+    const navigate = useNavigate(); // 
+
 
     // Validation function
     const validateForm = () => {
@@ -147,66 +151,53 @@ const Auth = () => {
       });
     };
 
-    const handleSubmit = async (e) => {
-      e.preventDefault();
-    
-      if (validateForm()) {
-        try {
-          // If login (isSwitch === true)
-          if (isSwitch) {
-            const response = await axios.post('https://ghsapartment-8b6109df7c25.herokuapp.com/api/v1/users/login', {
-              email: state.email,
-              password: state.password
-            });
-    
-            // Extract the token from the response
-            const { token, data } = response.data;
-    
-            // Save the token in localStorage
-            localStorage.setItem('token', token);
-    
-            // Update the auth context
-            auth.login();
-    
-            console.log('Login successful:', data.user);
-          }
-    
-          // If sign-up (isSwitch === false), handle differently
-          else {
-            const response = await axios.post('https://ghsapartment-8b6109df7c25.herokuapp.com/api/v1/users/signup', {
-              name: state.name,
-              email: state.email,
-              password: state.password,
-              passwordConfirm: state.password
-            });
-    
-            // Extract the token from the response
-            const { token, data } = response.data;
-    
-            // Save the token in localStorage
-            localStorage.setItem('token', token);
-    
-            // Update the auth context
-            auth.login();
-    
-            console.log('SignUp successful:', data.user);
-          }
-    
-          // Reset form after successful submission
-          dispatch({ type: 'RESET_FORM' });
-        } catch (error) {
-          // Show toast for error
-          if (error.response && error.response.data.message) {
-            toast.error(error.response.data.message);
-          } else {
-            toast.error('Authentication failed. Please try again.');
-          }
-    
-          console.error('Authentication error:', error.response ? error.response.data : error.message);
+const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (validateForm()) {
+      try {
+        if (isSwitch) {
+          // Login flow
+          const response = await axios.post('https://ghsapartment-8b6109df7c25.herokuapp.com/api/v1/users/login', {
+            email: state.email,
+            password: state.password
+          });
+
+          const { token, data } = response.data;
+          localStorage.setItem('token', token);
+          auth.login(data.user._id, token);  // Login using the context
+
+          // Redirect to Dashboard after successful login
+          navigate('/');  // This will navigate the user to the Dashboard
+        } else {
+          // Signup flow
+          const response = await axios.post('https://ghsapartment-8b6109df7c25.herokuapp.com/api/v1/users/signup', {
+            name: state.name,
+            email: state.email,
+            password: state.password,
+            passwordConfirm: state.password
+          });
+
+          const { token, data } = response.data;
+          localStorage.setItem('token', token);
+          auth.login(data.user._id, token);  // Login using the context
+
+          // Redirect to Dashboard after successful signup
+          navigate('/');  // This will navigate the user to the Dashboard
+        }
+
+        // Reset form after successful submission
+        dispatch({ type: 'RESET_FORM' });
+      } catch (error) {
+        // Handle errors
+        if (error.response && error.response.data.message) {
+          toast.error(error.response.data.message);
+        } else {
+          toast.error('Authentication failed. Please try again.');
         }
       }
-    };
-    
+    }
+  };
 
     const handleSwitch = () => {
       setIsSwitch((prevState) => !prevState);
