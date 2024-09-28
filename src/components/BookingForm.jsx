@@ -84,8 +84,11 @@ const Error = styled.div`
 
 const BookingForm = () => {
 
-  const { postData, loading, error } = usePost('https://your-api-url/v1/bookings');
+  const apiUrl = import.meta.env.VITE_BACKEND_URL;
 
+  const { postData, loading, error } = usePost(`${apiUrl}/v1/bookings`);
+
+  
 
 
   const initialFormData = {
@@ -113,8 +116,7 @@ const BookingForm = () => {
     // Fetch the list of apartments from the API
     const fetchApartments = async () => {
       try {
-        const apiUrl = import.meta.env.VITE_BACKEND_URL;
-
+        
         const response = await axios.get(`${apiUrl}/v1/apartments`);
         setApartments(response.data.data);
       } catch (err) {
