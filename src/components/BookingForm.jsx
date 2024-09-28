@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'
 import axios from 'axios';
+import usePost from './CustomHooks/usePost';
 
 const FormContainer = styled.div`
   max-width: 85%;
@@ -82,6 +83,11 @@ const Error = styled.div`
 `;
 
 const BookingForm = () => {
+
+  const { postData, loading, error } = usePost('https://your-api-url/v1/bookings');
+
+
+
   const initialFormData = {
     firstName: '',
     lastName: '',
@@ -97,11 +103,12 @@ const BookingForm = () => {
     cautionFee: 0,
   };
 
+  
+
   const [formData, setFormData] = useState(initialFormData);
 
   const [apartments, setApartments] = useState([]);
-  const [error, setError] = useState(null);
-
+  const [error2, setError2] = useState(null);
   useEffect(() => {
     // Fetch the list of apartments from the API
     const fetchApartments = async () => {
@@ -111,8 +118,9 @@ const BookingForm = () => {
         const response = await axios.get(`${apiUrl}/v1/apartments`);
         setApartments(response.data.data);
       } catch (err) {
-        console.error('Error fetching apartments:', err);
-        setError('Failed to load apartments. Please try again.');
+        
+        toast.error(error2)
+        setError2('Failed to load apartments. Please try again.');
       }
     };
     fetchApartments();
@@ -127,17 +135,11 @@ const BookingForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      const apiUrl = import.meta.env.VITE_BACKEND_URL;
-      
-      const response = await axios.post(`${apiUrl}/v1/bookings`, formData);
-      console.log('Booking created successfully:', response.data);
-      toast.success('Booking created successfully!');
-      setFormData(initialFormData);
-      setError(null);
-    } catch (err) {
-      setError(err.response.data.message);
-      toast.error('Failed to create booking. Please try again.');
+    
+    const result = await postData(formData);
+    if (result) {
+      // Success handling
+      console.log('Booking created successfully:', result);
     }
   };
 
@@ -277,7 +279,10 @@ const BookingForm = () => {
             />
           </FormField>
         </FormGrid>
-        <Button type="submit">Create Booking</Button>
+        <Button type="submit">
+          {loading ? 'Creatting...': 'Create Booking'}
+          
+          </Button>
         {error && <Error>{error}</Error>}
       </form>
     </FormContainer>
