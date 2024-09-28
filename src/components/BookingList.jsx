@@ -10,6 +10,9 @@ import useUpdate from '../components/CustomHooks/useUpdate';
 import useDelete from '../components/CustomHooks/useUpdate';
 import styled from 'styled-components';
 
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css'
+
 const BookingsList = () => {
   const apiUrl = import.meta.env.VITE_BACKEND_URL;
 
@@ -25,6 +28,7 @@ const BookingsList = () => {
 
   const handleDelete = (booking) => {
     setBookingToDelete(booking); 
+    
   };
 
   const confirmDelete = async () => {
@@ -59,6 +63,7 @@ const BookingsList = () => {
 `
   return (
     <div>
+    <ToastContainer />
       <Table headers={headers} data={bookings.map((booking) => ({
         'Guest Name': `${booking.guest.firstName} ${booking.guest.lastName}`,
         'Check-In Date': new Date(booking.checkInDate).toLocaleDateString(),
