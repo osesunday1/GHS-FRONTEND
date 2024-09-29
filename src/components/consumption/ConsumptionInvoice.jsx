@@ -1,7 +1,6 @@
 import jsPDF from 'jspdf';
 import styled from 'styled-components';
-
-
+import { imgData} from './imgData';
 
 const InvoiceContainer = styled.div`
   padding: 20px;
@@ -87,7 +86,9 @@ const ConsumptionInvoice = ({ consumption }) => {
         // Set font and color styles
         doc.setFontSize(18);
         doc.setTextColor(40);
-        doc.text('GHS APARTMENTS', 14, 22); // Logo placeholder
+        // Add the logo (make sure it's Base64 or local file)
+        const imgD = imgData;  // Base64 string or require/import path
+        doc.addImage(imgD, 'PNG', 14, 10, 50, 20); // x, y, width, height
         doc.text('INVOICE', 180, 22, null, null, 'right');
     
         // Guest details
