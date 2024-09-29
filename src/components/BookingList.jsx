@@ -7,7 +7,7 @@ import EditBookingForm from './EditBookingForm';
 
 import useFetch from '../components/CustomHooks/useFetch';
 import useUpdate from '../components/CustomHooks/useUpdate';
-import useDelete from '../components/CustomHooks/useUpdate';
+import useDelete from '../components/CustomHooks/useDelete';
 import styled from 'styled-components';
 
 import { ToastContainer } from 'react-toastify';
@@ -15,12 +15,13 @@ import 'react-toastify/dist/ReactToastify.css'
 
 const BookingsList = () => {
   const apiUrl = import.meta.env.VITE_BACKEND_URL;
-
-  const { data: bookings, loading, error } = useFetch(`${apiUrl}/v1/bookings`);
+  const [trigger, setTrigger] = useState(0);
+  const { data: bookings, loading, error } = useFetch(`${apiUrl}/v1/bookings`, trigger);
   const { updateData } = useUpdate();
   const { deleteData } = useDelete();
   const [selectedBooking, setSelectedBooking] = useState(null);
   const [bookingToDelete, setBookingToDelete] = useState(null);
+  
 
   const handleEdit = (booking) => {
     setSelectedBooking(booking);
@@ -32,18 +33,22 @@ const BookingsList = () => {
   };
 
   const confirmDelete = async () => {
-    const apiUrl = import.meta.env.VITE_BACKEND_URL;
-
-    await deleteData(`${apiUrl}/v1/bookings/${bookingToDelete._id}`);
-    // Filter out the deleted booking from the state
-    setBookingToDelete(null);
+    if (!bookingToDelete) return; // Make sure there's a booking selected for deletion
+  
+      const apiUrl = import.meta.env.VITE_BACKEND_URL;
+      await deleteData(`${apiUrl}/v1/bookings/${bookingToDelete._id}`); 
+      setBookingToDelete(null); // Clear after delete
+      setTrigger(trigger + 1);
+  
   };
+
 
   const handleSave = async (updatedBooking) => {
     const apiUrl = import.meta.env.VITE_BACKEND_URL;
     
     await updateData(`${apiUrl}/v1/bookings/${updatedBooking._id}`, updatedBooking);
     setSelectedBooking(null);
+    setTrigger(trigger + 1);
   };
 
   if (loading) return <div>Loading...</div>;

@@ -1,8 +1,10 @@
-import { useState, useEffect } from 'react';
-import axios from 'axios';
+import { useState } from 'react';
 import Table from '../styles/Table';
-import { FaRegEdit } from "react-icons/fa";
+import useDelete from './CustomHooks/useDelete';
+import useFetch from './CustomHooks/useFetch';
+import useUpdate from './CustomHooks/useUpdate';
 import { MdDelete } from "react-icons/md";
+import { FaRegEdit } from "react-icons/fa";
 import Modal from '../styles/Modal';
 import EditGuestForm from './EditGuestForm'; // Assume this component exists for editing guests
 import styled from 'styled-components';
@@ -33,29 +35,18 @@ const StyledContent = styled.div`
 `;
 
 const GuestList = () => {
-  const [guests, setGuests] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const apiUrl = import.meta.env.VITE_BACKEND_URL;
+
+  const [trigger, setTrigger] = useState(0);
+  const { data: guests, loading, error } = useFetch(`${apiUrl}/v1/guests`, trigger);
+  
+  const { updateData } = useUpdate();
+  const { deleteData } = useDelete();
+
   const [selectedGuest, setSelectedGuest] = useState(null); // State to track the selected guest
   const [guestToDelete, setGuestToDelete] = useState(null); // State to track the guest to delete
 
-  useEffect(() => {
-    const fetchGuests = async () => {
-      try {
-        const apiUrl = import.meta.env.VITE_BACKEND_URL;
 
-        const response = await axios.get(`${apiUrl}/v1/guests`);
-        setGuests(response.data.data);
-        setLoading(false);
-      } catch (err) {
-        console.error('Error fetching guests:', err);
-        setError('Failed to fetch guests');
-        setLoading(false);
-      }
-    };
-
-    fetchGuests(); // Call the async function
-  }, []);
 
   const handleEdit = (guest) => {
     setSelectedGuest(guest);
@@ -68,32 +59,18 @@ const GuestList = () => {
   const confirmDelete = async () => {
     if (!guestToDelete) return;
 
-    try {
-      const apiUrl = import.meta.env.VITE_BACKEND_URL;
-
-      await axios.delete(`${apiUrl}/v1/guests/${guestToDelete._id}`);
-      setGuests(guests.filter(g => g._id !== guestToDelete._id));
+      await deleteData(`${apiUrl}/v1/guests/${guestToDelete._id}`);
       setGuestToDelete(null); // Close the modal after deletion
-    } catch (err) {
-      console.error('Error deleting guest:', err);
-      setError('Failed to delete guest.');
-    }
+      setTrigger(trigger + 1);
   };
 
   const handleSave = async (updatedGuest) => {
-    try {
-      const apiUrl = import.meta.env.VITE_BACKEND_URL;
-      await axios.put(`${apiUrl}/v1/guests/${updatedGuest._id}`, updatedGuest);
+
+      await updateData(`${apiUrl}/v1/guests/${updatedGuest._id}`, updatedGuest);
       setSelectedGuest(null); // Reset the form after saving
-      setGuests((prevGuests) =>
-        prevGuests.map((guest) =>
-          guest._id === updatedGuest._id ? updatedGuest : guest
-        )
-      );
-    } catch (err) {
-      console.error('Error updating guest:', err);
-    }
-  };
+      setTrigger(trigger + 1);
+  }
+
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>{error}</div>;
@@ -147,5 +124,6 @@ const GuestList = () => {
     </div>
   );
 };
+
 
 export default GuestList;

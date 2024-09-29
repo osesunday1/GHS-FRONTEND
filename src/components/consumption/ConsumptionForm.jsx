@@ -3,6 +3,9 @@ import styled from 'styled-components';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import usePost from '../CustomHooks/usePost';
+
+
 
 const FormContainer = styled.div`
   max-width: 85%;
@@ -68,6 +71,11 @@ const Error = styled.div`
 `;
 
 const ConsumptionForm = () => {
+  const apiUrl = import.meta.env.VITE_BACKEND_URL;
+
+  const { postData, loading, error } = usePost(`${apiUrl}/v1/bookings`);
+
+
   const initialFormData = {
     guestId: '',
     items: [{ inventoryItemId: '', quantity: 1 }],
@@ -76,20 +84,19 @@ const ConsumptionForm = () => {
   const [formData, setFormData] = useState(initialFormData);
   const [guests, setGuests] = useState([]);
   const [inventoryItems, setInventoryItems] = useState([]);
-  const [error, setError] = useState(null);
-
+  const [error2, setError2] = useState(null);
   useEffect(() => {
     const fetchGuestsAndInventory = async () => {
       try {
-        const apiUrl = import.meta.env.VITE_BACKEND_URL;
         const guestsResponse = await axios.get(`${apiUrl}/v1/guests`);
         setGuests(guestsResponse.data.data);
         
         const inventoryResponse = await axios.get(`${apiUrl}/v1/inventory`);
         setInventoryItems(inventoryResponse.data.data);
+
       } catch (err) {
-        console.error('Error fetching data:', err);
-        setError('Failed to load guests or inventory items. Please try again.');
+        toast.error(error2)
+        setError2('Failed to load guests or inventory items. Please try again.');
       }
     };
     fetchGuestsAndInventory();
@@ -122,15 +129,11 @@ const ConsumptionForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      const apiUrl = import.meta.env.VITE_BACKEND_URL;
-      await axios.post(`${apiUrl}/v1/consumption`, formData);
-      toast.success('Consumption added successfully!');
-      setFormData(initialFormData);
-      setError(null);
-    } catch (err) {
-      setError(err.response.data.message);
-      toast.error('Failed to add consumption. Please try again.');
+    
+    const result = await postData(formData);
+    if (result) {
+      // Success handling
+      setFormData(initialFormData)
     }
   };
 
@@ -199,7 +202,7 @@ const ConsumptionForm = () => {
             </Button>
           </FormField>
         </FormGrid>
-        <Button type="submit">Add Consumption</Button>
+        <Button type="submit">{loading ? 'Adding...': 'Add Consumption'}</Button>
         {error && <Error>{error}</Error>}
       </form>
     </FormContainer>

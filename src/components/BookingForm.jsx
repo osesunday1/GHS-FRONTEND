@@ -119,7 +119,6 @@ const BookingForm = () => {
         
         const response = await axios.get(`${apiUrl}/v1/apartments`);
         setApartments(response.data.data);
-        toast.success()
         
       } catch (err) {
         

@@ -1,6 +1,8 @@
 import { useState } from 'react';
-import axios from 'axios';
 import styled from 'styled-components';
+import usePost from './CustomHooks/usePost';
+
+
 
 // Styled components
 const FormContainer = styled.div`
@@ -52,6 +54,12 @@ const Select = styled.select`
   font-size: 16px;
 `;
 
+const Error = styled.div`
+  color: red;
+  margin-top: 10px;
+`;
+
+
 const Button = styled.button`
   width: 100%;
   padding: 15px;
@@ -74,17 +82,21 @@ const Button = styled.button`
 `;
 
 const ApartmentForm = () => {
-  const [formData, setFormData] = useState({
+  const { postData, loading, error } = usePost(`https://ghsapartment-8b6109df7c25.herokuapp.com/api/v1/apartments`);
+
+  const initialFormData = {
     name: '',
     type: '',
     description: '',
     maxGuests: 1,
     address: '',
     city: '',
-  });
+  };
 
-  const [images, setImages] = useState([]);
-  const [uploading, setUploading] = useState(false);
+
+  const [formData, setFormData] = useState(initialFormData )
+    
+
 
   const handleChange = (e) => {
     setFormData({
@@ -93,62 +105,19 @@ const ApartmentForm = () => {
     });
   };
 
-  const handleFileChange = (e) => {
-    setImages(e.target.files);
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setUploading(true);
-
-    const uploadImage = async (image) => {
-      const data = new FormData();
-      data.append("file", image);
-      data.append("upload_preset", "GHS_Cloudinary");
-      data.append("cloud_name", "dvh9j4utq");
-      data.append("folder", "apartments");
-
-      const res = await fetch("https://api.cloudinary.com/v1_1/dvh9j4utq/image/upload", {
-        method: 'POST',
-        body: data
-      });
-
-      return res.json();
-    };
-
-    const uploadedImages = [];
-    try {
-      for (let i = 0; i < images.length; i++) {
-        const uploadRes = await uploadImage(images[i]);
-        uploadedImages.push({
-          url: uploadRes.secure_url,
-          public_id: uploadRes.public_id
-        });
-      }
-
-      const apartmentData = {
-        ...formData,
-        images: uploadedImages.map(img => img.url)
-      };
-
-      const apiUrl = import.meta.env.VITE_BACKEND_URL;
-      
-      const response = await axios.post(`${apiUrl}/v1/apartments`, apartmentData);
-      console.log('Apartment created:', response.data);
-      alert('Apartment created successfully');
-    } catch (error) {
-      console.error('Error creating apartment:', error);
-      alert('Error creating apartment');
-
-      for (let img of uploadedImages) {
-        await axios.post(`https://api.cloudinary.com/v1_1/dvh9j4utq/delete_by_token`, {
-          public_id: img.public_id
-        });
-      }
-    } finally {
-      setUploading(false);
+    const result = await postData(formData);
+    if (result) {
+      // Success handling
+      setFormData(initialFormData)
     }
   };
+  
+
+
+
   return (
     
     <FormContainer>
@@ -162,8 +131,6 @@ const ApartmentForm = () => {
           <Label htmlFor="type">Type:</Label>
           <Select name="type" value={formData.type} onChange={handleChange} required>
             <option value="">Select type</option>
-            <option value="studio">Studio</option>
-            <option value="penthouse">Penthouse</option>
             <option value="1-bed">1 Bed</option>
             <option value="2-bed">2 Bed</option>
           </Select>
@@ -176,12 +143,9 @@ const ApartmentForm = () => {
           <Label htmlFor="maxGuests">Max Guests:</Label>
           <Input type="number" name="maxGuests" value={formData.maxGuests} onChange={handleChange} required />
         </FormField>
-        <FormField>
-          <Label htmlFor="images">Images:</Label>
-          <Input type="file" name="images" onChange={handleFileChange} multiple required />
-        </FormField>
-        <Button type="submit" disabled={uploading}>
-          {uploading ? 'Uploading...' : 'Create Apartment'}
+        <Button type="submit" >
+          {loading ? 'Creating...' : 'Create Apartment'}
+          {error && <Error>{error}</Error>}
         </Button>
       </form>
     </FormContainer>

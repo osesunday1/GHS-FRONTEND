@@ -8,7 +8,6 @@ const useDelete = () => {
 
   const deleteData = async (url) => {
     try {
-
       const token = localStorage.getItem('token'); // Retrieve token from localStorage
       const headers = token ? { Authorization: `Bearer ${token}` } : {}; // Set Authorization header if token exists
 

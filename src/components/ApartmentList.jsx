@@ -1,32 +1,36 @@
-import { useState, useEffect } from 'react';
-import axios from 'axios';
-
+import { useState} from 'react';
+import useFetch from './CustomHooks/useFetch';
 import Table from '../styles/Table';
-
-
+import useDelete from './CustomHooks/useDelete';
+import { MdDelete } from "react-icons/md";
+import Modal from '../styles/Modal';
+import styled from 'styled-components';
 
 const ApartmentList = () => {
-  const [apartments, setApartments] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  
-  const apiUrl = import.meta.env.VITE_BACKEND_URL;
-  
-  useEffect(() => {
-    const fetchApartments = async () => {
-      try {
-        const response = await axios.get(`${apiUrl}/v1/apartments`);
-        setApartments(response.data.data);
-        setLoading(false);
-      } catch (err) {
-        console.error('Error fetching apartments:', err);
-        setError('Failed to fetch apartments');
-        setLoading(false);
-      }
-    };
 
-    fetchApartments();
-  }, []);
+  const apiUrl = import.meta.env.VITE_BACKEND_URL;
+  const [trigger, setTrigger] = useState(0);
+  const { data: apartments, loading, error } = useFetch(`${apiUrl}/v1/apartments`, trigger);
+  const { deleteData } = useDelete();
+  const [apartmentToDelete, setApartmentToDelete] = useState(null);
+  
+
+  
+  const handleDelete = (apt) => {
+    setApartmentToDelete(apt); 
+    
+  };
+
+  const confirmDelete = async () => {
+    if (!apartmentToDelete) return; // Make sure there's an apartment selected for deletion
+  
+      const apiUrl = import.meta.env.VITE_BACKEND_URL;
+      await deleteData(`${apiUrl}/v1/apartments/${apartmentToDelete._id}`); 
+      setApartmentToDelete(null); // Clear after delete
+      setTrigger(trigger + 1);
+  
+  };
+
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>{error}</div>;
@@ -36,15 +40,37 @@ const ApartmentList = () => {
     'Apartment Name': apartment.name,
     'Type': apartment.type,
     'Description': apartment.description,
-    'Max Guests': apartment.maxGuests
+    'Max Guests': apartment.maxGuests,
+    'Actions': (
+      <div style={{ display: 'flex', gap: '10px' }}>
+            <MdDelete style={{ cursor: 'pointer', color: 'red' }} onClick={() => handleDelete(apartment)} />
+          </div>
+    )
   }));
 
+  const StyledContent =styled.div`
+  margin: 0 auto;
+  display: grid;
+  justify-content: center;
+  align-items: center;
+`
   
   return (
     <div>
       
       <Table headers={headers} data={data} />
+
+      {apartmentToDelete && (
+        <Modal show={true} onClose={() => setApartmentToDelete(null)} title="Confirm Deletion">
+          <StyledContent>
+            <p>Are you sure you want to delete this booking?</p>
+            <button onClick={confirmDelete} style={{ backgroundColor: 'red', color: 'white' }}>Delete</button>
+          </StyledContent>
+        </Modal>
+      )}
     </div>
+
+    
   );
 };
 
