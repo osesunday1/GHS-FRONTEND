@@ -73,7 +73,7 @@ const Error = styled.div`
 const ConsumptionForm = () => {
   const apiUrl = import.meta.env.VITE_BACKEND_URL;
 
-  const { postData, loading, error } = usePost(`${apiUrl}/v1/bookings`);
+  const { postData, loading, error } = usePost(`${apiUrl}/v1/consumption`);
 
 
   const initialFormData = {
