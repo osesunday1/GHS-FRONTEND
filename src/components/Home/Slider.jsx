@@ -70,7 +70,8 @@ const SliderItem = styled.div`
     position: absolute;
     left: 0;
     bottom: 0;
-    background-image: linear-gradient(to top, #000 10%, transparent);
+    background-color: #874bb8;
+    opacity: 0.2;
   }
 `;
 
@@ -125,7 +126,7 @@ const Arrows = styled.div`
 // Styled component for the thumbnails
 const Thumbnail = styled.div`
   position: absolute;
-  bottom: 50px;
+  bottom: 20px;
   z-index: 11;
   display: flex;
   gap: 10px;
@@ -135,6 +136,8 @@ const Thumbnail = styled.div`
   box-sizing: border-box;
   overflow: auto;
   justify-content: center;
+  align-items: center;
+
 
   &::-webkit-scrollbar {
     width: 0;
@@ -143,12 +146,21 @@ const Thumbnail = styled.div`
   &:hover{
     cursor: pointer;
   }
+
+  @media (max-width: 768px) {
+    height: 180px;  
+    bottom: 5px;
+  }
+
+  @media (max-width: 480px) {
+    height: 150px;  
+  }
 `;
 
 // Styled component for each thumbnail item
 const ThumbnailItem = styled.div`
   width: 150px;
-  height: 220px;
+  height: 90%;
   filter: brightness(${(props) => (props.active ? 1.5 : 0.5)});
   transition: 0.5s;
   flex-shrink: 0;
@@ -158,6 +170,14 @@ const ThumbnailItem = styled.div`
     height: 100%;
     object-fit: cover;
     border-radius: 10px;
+  }
+
+  @media (max-width: 768px) {
+    width: 120px;  /* Reduce the width on tablets */
+  }
+
+  @media (max-width: 480px) {
+    width: 100px;  /* Further reduce width on phones */
   }
 `;
 
