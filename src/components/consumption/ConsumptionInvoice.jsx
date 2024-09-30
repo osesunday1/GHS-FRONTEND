@@ -105,6 +105,7 @@ const ConsumptionInvoice = ({ consumption }) => {
         doc.text(`Payment Due: ${new Date(consumption.createdAt).toLocaleDateString()}`, 14, 85);
     
         // Table Header
+        doc.setFont('helvetica', 'bold'); // Set font to bold
         doc.setFontSize(12);
         doc.setFillColor(37, 150, 190);
         doc.rect(14, 100, 182, 10, 'F');
@@ -115,6 +116,7 @@ const ConsumptionInvoice = ({ consumption }) => {
         doc.text('Amount', 160, 106);
     
         // List Items
+        doc.setFont('helvetica', 'regular');
         let currentYPosition = 116;
         consumption.items.forEach(item => {
           doc.text(item.inventoryItemId.item, 14, currentYPosition);
