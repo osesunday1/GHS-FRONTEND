@@ -6,6 +6,7 @@ import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from 'react-router-dom'; // 
+import Header from '../components/Home/Header';
 
 
 const StyledContainer= styled.div`
@@ -208,6 +209,7 @@ const handleSubmit = async (e) => {
     return (
       <>
       <ToastContainer />
+      <Header/>
       <StyledContainer>
         <StyledContainer2>
         <StyledForm onSubmit={handleSubmit}>
@@ -250,7 +252,7 @@ const handleSubmit = async (e) => {
           {isSwitch ? 
           (<><StyledButton type="submit" >Login</StyledButton>
           <StyledSwitch>
-          <p style={{ color: "white" }} onClick={handleSwitch}>Dont have an account? Switch to Signup </p>
+          {/*<p style={{ color: "white" }} onClick={handleSwitch}>Dont have an account? Switch to Signup </p>*/}
           </StyledSwitch></>)
           :
           (<><StyledButton type="submit" >SignUp</StyledButton>

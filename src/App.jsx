@@ -21,6 +21,7 @@ import Calendar from './pages/Calendar';
 import ConsumptionForm from './components/consumption/ConsumptionForm';
 import EditConsumptionForm from './components/consumption/EditConsumptionForm';
 import Auth from './pages/Auth';
+import Home from './pages/Home';
 
 const StyledStructure = styled.div`
   display: ${({ isLoggedIn }) => (isLoggedIn ? 'grid' : 'block')}; 
@@ -55,12 +56,13 @@ function App() {
   const [collapseSidebar, setCollapseSidebar] = useState(true);
   const windowWidth = useWindowWidth();
 
-  const login = useCallback((uid, token) => {
+  const login = useCallback((uid, token, expirationDate) => {
     setToken(token);
     setUserId(uid);
+    const tokenExpirationDate = expirationDate || new Date(new Date().getTime() + 10 * 60 * 60); // default to 1-hour expiry
     localStorage.setItem(
       'userData',
-      JSON.stringify({ userId: uid, token: token })
+      JSON.stringify({ userId: uid, token: token, expiration: tokenExpirationDate.toISOString(), })
     );
   }, []);
 
@@ -70,14 +72,42 @@ function App() {
     localStorage.removeItem('userData');
   }, []);
 
+
+
   // Check if user is already logged in by retrieving token from localStorage
   useEffect(() => {
     const storedData = JSON.parse(localStorage.getItem('userData'));
-    if (storedData && storedData.token) {
-      login(storedData.userId, storedData.token);
-    }
-  }, [login]);
+    if (storedData && storedData.token && new Date(storedData.expiration) > new Date()
 
+    ) {
+      login(storedData.userId, storedData.token);
+    } else {
+      logout(); // Log out if the token is expired or invalid
+    }
+  }, [login, logout]);
+
+ 
+  // Auto logout when token expires
+  useEffect(() => {
+    if (token) {
+      const tokenExpirationDate = new Date(
+        JSON.parse(localStorage.getItem('userData')).expiration
+      );
+      const remainingTime = tokenExpirationDate.getTime() - new Date().getTime();
+
+      const tokenTimer = setTimeout(() => {
+        logout();
+      }, remainingTime);
+
+      return () => {
+        clearTimeout(tokenTimer); // Clear the timer if the component unmounts or the token changes
+      };
+    }
+  }, [token, logout]);
+ 
+ 
+ 
+ 
   useEffect(() => {
     if (windowWidth <= 768) {
       setCollapseSidebar(true);
@@ -109,8 +139,9 @@ function App() {
   } else {
     routes = (
       <Routes>
+        <Route path="/home" element={<Home/>} />
         <Route path="/auth" element={<Auth />} />
-        <Route path="*" element={<Navigate to="/auth" />} />
+        <Route path="*" element={<Navigate to="/home" />} />
       </Routes>
     );
   }
