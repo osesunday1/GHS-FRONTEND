@@ -110,7 +110,7 @@ const ConsumptionInvoice = ({ consumption }) => {
         doc.setFillColor(37, 150, 190);
         doc.rect(14, 100, 182, 10, 'F');
         doc.setTextColor(0);
-        doc.text('Item', 14, 106);
+        doc.text('Item', 19, 106);
         doc.text('Quantity', 80, 106);
         doc.text('Price', 120, 106);
         doc.text('Amount', 160, 106);
@@ -120,7 +120,7 @@ const ConsumptionInvoice = ({ consumption }) => {
         let currentYPosition = 116;
         consumption.items.forEach(item => {
           doc.text(item.inventoryItemId.item, 14, currentYPosition);
-          doc.text(item.quantity.toString(), 80, currentYPosition);
+          doc.text(item.quantity.toString(), 87, currentYPosition);
           doc.text(`#${item.inventoryItemId.price.toLocaleString()}`, 120, currentYPosition);
           doc.text(`#${item.amount.toLocaleString()}`, 160, currentYPosition);
           currentYPosition += 10; // Move down for the next item
