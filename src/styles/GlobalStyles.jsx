@@ -8,6 +8,14 @@ const GlobalStyles = createGlobalStyle`
     --white: #ffffff;
     --black: #000000;
     --darkgrey: #585555;
+    --blackColor: #0b0c10 ;
+    --blueText: #66FCF1;
+    --blueText2: #d2e9e7;
+    --blueText3: #abe6e1;
+    --blue4:#1F2833;
+    --whiteColor: #ffffff;
+    --greyColor: #C5C6C7;
+    --greyColor2: #999b9c;
   }
 
   body {
