@@ -88,23 +88,25 @@ const ConsumptionInvoice = ({ consumption }) => {
         doc.setTextColor(40);
         // Add the logo (make sure it's Base64 or local file)
         const imgD = imgData;  // Base64 string or require/import path
-        doc.addImage(imgD, 'PNG', 14, 10, 50, 20); // x, y, width, height
+        doc.addImage(imgD, 'PNG', 14, 10, 50, 35); // x, y, width, height
         doc.text('INVOICE', 180, 22, null, null, 'right');
-    
-        // Guest details
+
+        doc.setFont('helvetica', 'bold'); // Set font to bold
         doc.setFontSize(12);
-        doc.text(`Guest Name: ${consumption.guestId.firstName} ${consumption.guestId.lastName}`, 14, 40);
-        doc.text(`Date: ${new Date(consumption.createdAt).toLocaleDateString()}`, 14, 50);
-        doc.text(`Amount Due (NGN): #${consumption.totalAmount.toLocaleString()}`, 180, 50, null, null, 'right');
+        doc.text(`Guest Name: ${consumption.guestId.firstName} ${consumption.guestId.lastName}`, 14, 71);
+        // Guest details
+        doc.setFont('helvetica', 'regular');
+        doc.setFontSize(12);
+        doc.text(`Date: ${new Date(consumption.createdAt).toLocaleDateString()}`, 14, 78);
+        doc.text(`Amount Due (NGN): #${consumption.totalAmount.toLocaleString()}`, 180, 71, null, null, 'right');
         
         // Billing Information
-        doc.text('BILL TO:', 14, 70);
-        doc.text(`${consumption.guestId.firstName} ${consumption.guestId.lastName}`, 14, 80);
-        doc.text(`Payment Due: ${new Date(consumption.createdAt).toLocaleDateString()}`, 14, 90);
+        
+        doc.text(`Payment Due: ${new Date(consumption.createdAt).toLocaleDateString()}`, 14, 85);
     
         // Table Header
         doc.setFontSize(12);
-        doc.setFillColor(230, 230, 230);
+        doc.setFillColor(37, 150, 190);
         doc.rect(14, 100, 182, 10, 'F');
         doc.setTextColor(0);
         doc.text('Item', 14, 106);
@@ -123,9 +125,16 @@ const ConsumptionInvoice = ({ consumption }) => {
         });
     
         // Total Amount
-        doc.setFontSize(14);
-        doc.text('Total:', 120, currentYPosition + 10);
-        doc.text(`#${consumption.totalAmount.toLocaleString()}`, 160, currentYPosition + 10);
+        doc.setFont('helvetica', 'bold'); // Set font to bold
+        doc.setFontSize(13);
+        doc.text('Total:', 120, currentYPosition + 3);
+        doc.text(`#${consumption.totalAmount.toLocaleString()}`, 160, currentYPosition + 3);
+
+
+        // Add footer with account details
+        doc.setFontSize(12); // Smaller font size for footer
+        doc.text('Account Number: 1852987806', 80, 282); // Set y-value close to the bottom (A4 page height is 297)
+        doc.text('AccessBank - Grace House Service Apartment Ltd', 61, 290); // Another line slightly below
     
         // Footer (Download button)
         doc.save(`Invoice_${consumption.guestId.firstName}_${consumption.guestId.lastName}.pdf`);
