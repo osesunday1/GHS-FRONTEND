@@ -213,7 +213,7 @@ const handleSubmit = async (e) => {
       <StyledContainer>
         <StyledContainer2>
         <StyledForm onSubmit={handleSubmit}>
-          {isSwitch ? <h2 style={{ color: "white" }}>Login</h2> : <h2 style={{ color: "white" }}>SignUp</h2>}
+          {isSwitch ? <h2 style={{ color: "white", margin: "0 auto"}}>Login</h2> : <h2 style={{ color: "white" }}>SignUp</h2>}
 
           { !isSwitch &&
             <>
@@ -253,6 +253,7 @@ const handleSubmit = async (e) => {
           (<><StyledButton type="submit" >Login</StyledButton>
           <StyledSwitch>
           {/*<p style={{ color: "white" }} onClick={handleSwitch}>Dont have an account? Switch to Signup </p>*/}
+          {<p style={{ color: "white" }} >Only staff can login </p>}
           </StyledSwitch></>)
           :
           (<><StyledButton type="submit" >SignUp</StyledButton>

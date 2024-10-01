@@ -76,6 +76,27 @@ const ShowMission = styled(motion.div)`
   margin-top: 0%;
 `;
 
+const StyledParagraph = styled.p`
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400; /* Normal font weight for paragraphs */
+    line-height: 1.6; /* Optional: Set a line-height for better readability */
+    margin: 0 0 20px 0; /* Optional: Set a default margin for paragraphs */
+`
+
+const Tops = styled.div`
+    display: flex;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 800;
+    font-size: 26px;
+    justify-content: center;
+    margin-bottom: 20px;
+
+    @media (max-width: 768px) {
+      margin-bottom: 0px;
+    }
+`
+
+
 const Tabs = styled.div`
   margin-bottom: 0px;
   
@@ -149,6 +170,9 @@ const AboutSection1 = () => {
 
   return (
     <Container>
+      <Tops>
+        OUR APARTMENTS
+      </Tops>
     <Section2Container>
       <Overview>
         <Tabs>
@@ -162,10 +186,10 @@ const AboutSection1 = () => {
           
           <ShowMission variants={containerVariants} initial="hidden" animate="visible">
             <motion.h3 variants={childVariants}> Ivory Pearl</motion.h3>
-            <p>
+            <StyledParagraph>
             Step into a world of sophistication at Ivory Pearl, where elegance meets comfort. This luxurious apartment is designed for guests who appreciate the finer things in life. With classic décor and modern amenities, you’ll feel both relaxed and inspired in this serene environment. Enjoy 24-hour electricity, unwind with a game on the PlayStation 5, and let our daily housekeeping keep everything pristine. Whether you’re here for business or leisure, our on-site restaurant is ready to serve you with delectable dishes to complete your stay. Ivory Pearl is your perfect getaway for timeless luxury.
 
-            </p>
+            </StyledParagraph>
           </ShowMission>
 
         )}
@@ -173,9 +197,9 @@ const AboutSection1 = () => {
         {toggle === 2 && (
           <ShowMission variants={containerVariants} initial="hidden" animate="visible">
             <motion.h3 variants={childVariants}>Cozy Suite</motion.h3>
-            <p>
+            <StyledParagraph>
             Experience the warmth and comfort of Cozy Suites, your personal retreat designed for relaxation. With its inviting ambiance and cozy interior, this apartment feels like a home away from home. Offering 24-hour electricity, a PlayStation 5 for entertainment, daily housekeeping, and a restaurant to cater to your dining needs, you’ll have everything you need for a perfect stay. Whether you’re here for a quick getaway or a longer stay, Cozy Suites provides the ultimate in comfort and convenience, wrapped in a warm, homey atmosphere.
-            </p>
+            </StyledParagraph>
           </ShowMission>
         )}
       </Overview>
