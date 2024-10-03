@@ -10,6 +10,7 @@ const StyledHeader = styled.header`
     top: 0;
     left: 0;
     padding: 10px 0rem 10px 0rem;
+    background: var(--blue4);
 
     @media (max-width: 768px) {
       justify-content:baseline;

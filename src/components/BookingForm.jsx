@@ -1,9 +1,11 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import styled from 'styled-components';
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer,} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'
-import axios from 'axios';
 import usePost from './CustomHooks/usePost';
+import useFetch from './CustomHooks/useFetch';
+
+
 
 const FormContainer = styled.div`
   max-width: 85%;
@@ -87,6 +89,8 @@ const BookingForm = () => {
   const apiUrl = import.meta.env.VITE_BACKEND_URL;
 
   const { postData, loading, error } = usePost(`https://ghsapartment-8b6109df7c25.herokuapp.com/api/v1/bookings`);
+  
+  const { data: apartments} = useFetch(`${apiUrl}/v1/apartments`);
 
   
 
@@ -110,24 +114,7 @@ const BookingForm = () => {
 
   const [formData, setFormData] = useState(initialFormData);
 
-  const [apartments, setApartments] = useState([]);
-  const [error2, setError2] = useState(null);
-  useEffect(() => {
-    // Fetch the list of apartments from the API
-    const fetchApartments = async () => {
-      try {
-        
-        const response = await axios.get(`${apiUrl}/v1/apartments`);
-        setApartments(response.data.data);
-        
-      } catch (err) {
-        
-        toast.error(error2)
-        setError2('Failed to load apartments. Please try again.');
-      }
-    };
-    fetchApartments();
-  }, []);
+
 
   const handleChange = (e) => {
     setFormData({

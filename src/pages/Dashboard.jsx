@@ -8,8 +8,10 @@ import RevenueComparisonChart from "../components/Dashboard/RevenueComparisonCha
 import TotalAmountPaidChart from "../components/Dashboard/TotalAmountPaidChart";
 
 const Container =styled.div`
-  max-width: 1500px;
+  width: 100%;
   margin: 0 auto;
+  justify-content: center;
+  align-items: center;
 `
 
 const Top = styled.section`
@@ -18,6 +20,14 @@ const Top = styled.section`
   margin: 0 auto;
   margin-bottom: 30px;
   gap: 10px;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    margin: 0 auto;
+    align-items: center;
+    width: 90%;
+    margin-top: 10px;
+  }
 `;
 
 
@@ -29,6 +39,14 @@ const Middle = styled.section`
   margin-bottom: 30px;
   gap: 10px;
   grid-template-columns: 1fr auto;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    margin: 0 auto;
+    align-items: center;
+    width: 90%;
+    display: none;
+  }
 `
 
 

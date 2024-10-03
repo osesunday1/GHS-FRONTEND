@@ -26,15 +26,21 @@ import Home from './pages/Home';
 const StyledStructure = styled.div`
   display: ${({ isLoggedIn }) => (isLoggedIn ? 'grid' : 'block')}; 
   grid-template-columns: ${({ collapseSidebar }) => (collapseSidebar ? '100px 1fr' : '250px 1fr')};
-  height: 100vh;
-  background-color: var(--primary-background);
+  height: 100%;
+  width: 100%;
+  background-color: var(--white);
   transition: grid-template-columns 0.3s ease, transform 0.3s ease;
+
+  @media (max-width: 768px) {
+    display: block;
+  }
 `;
 
 const StyledMain = styled.main`
-  background: var(--secondary-background);
+  background-color: var(--white);
   min-height: 100vh;
   padding: ${(props) => (props.isLoggedIn ? '1em' : 'none')} 1em;
+  
 `;
 
 const StyledH1Logo = styled.div`
@@ -150,7 +156,11 @@ function App() {
     <>
       <GlobalStyles />
       <AuthContext.Provider value={{ isLoggedIn: !!token, token, userId, login, logout }}>
+
+
         <StyledStructure isLoggedIn={!!token} collapseSidebar={collapseSidebar}>
+         
+         {/*====================== sidebar =======================*/}
           {token && (
             <SideDrawer collapseSidebar={collapseSidebar}>
               <StyledH1Logo collapseSidebar={collapseSidebar}>
@@ -163,7 +173,11 @@ function App() {
             </SideDrawer>
           )}
           <div>
-            <MainNavigation setCollapseSidebar={setCollapseSidebar} collapseSidebar={collapseSidebar} />
+            {/* ================navigation===================*/}
+          <MainNavigation setCollapseSidebar={setCollapseSidebar} collapseSidebar={collapseSidebar} />
+          <br />
+
+          {/* ===================content=====================*/}
             <StyledMain isLoggedIn={!!token}>
               {routes}
             </StyledMain>
