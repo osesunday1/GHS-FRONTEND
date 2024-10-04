@@ -7,9 +7,9 @@ import { HiArrowNarrowRight } from "react-icons/hi";
 import MainHeader from './MainHeader';
 import styled from 'styled-components';
 import NavLinks from './NavLinks';
+import NavLinksMobile from "./NavLinksMobile";
 import SideDrawerMobile from "./SideDrawerMobile";
 import Backdrop from "../../styles/Backdrop";
-import Addings from "./Addings";
 
 const DrawerNav = styled.nav`
 height: 100%;
@@ -121,9 +121,8 @@ const MainNavigation = ({setCollapseSidebar, collapseSidebar}) => {
           {drawerIsOpen && <Backdrop closeDrawerHandler={closeDrawerHandler} />}
           <SideDrawerMobile show={drawerIsOpen} closeDrawerHandler={closeDrawerHandler}>
           <DrawerNav>
-          <NavLinks />
-          <Addings/>
-        </DrawerNav>
+          <NavLinksMobile/>
+          </DrawerNav>
           </SideDrawerMobile>
           
           

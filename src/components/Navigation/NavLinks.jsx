@@ -14,7 +14,6 @@ const StyledNavLinks = styled.ul`
   flex-direction: ${(props) => (props.isSidebar ? 'column' : 'row')};
   align-items: center;
   padding-left: ${(props) => (props.isSidebar ? '0' : '0')};
-  flex-direction: column;
 
   
 `;
