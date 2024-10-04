@@ -1,11 +1,26 @@
 
 import { NavLink } from "react-router-dom";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { AuthContext } from "../../context/auth-context";
 import { HiAdjustmentsHorizontal } from "react-icons/hi2";
+import { HiArrowNarrowRight } from "react-icons/hi";
 import MainHeader from './MainHeader';
 import styled from 'styled-components';
 import NavLinks from './NavLinks';
+import SideDrawerMobile from "./SideDrawerMobile";
+import Backdrop from "../../styles/Backdrop";
+import Addings from "./Addings";
+
+const DrawerNav = styled.nav`
+height: 100%;
+position: fixed;
+color: var(--white);
+align-content: center;
+justify-items: center;
+justify-content: center;
+align-items: center;
+margin: 0 auto;
+`;
 
 
 const MenuButton = styled.button`
@@ -19,8 +34,31 @@ const MenuButton = styled.button`
   justify-content: space-around;
   margin-right: 2rem;
   cursor: pointer;
-  color: var(--darkgrey);
+  color: var(--white);
+
+  @media (max-width: 768px) {
+    display: none;
+  }
 `;
+
+const MenuButton2 = styled.button`
+  width: 3rem;
+  height: 3rem;
+  font-size: 30px;
+  background: transparent;
+  border: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  margin-right: 2rem;
+  cursor: pointer;
+  color: var(--white);
+
+  @media (min-width: 768px) {
+    display: none;
+  }
+`;
+
 
 
 const HeaderNav = styled.nav`
@@ -48,8 +86,12 @@ const StyledNavLink = styled(NavLink)`
     color: var(--highlight-color);
   }
 `;
+
+
+
+
 const MainNavigation = ({setCollapseSidebar, collapseSidebar}) => {
-  
+  const [drawerIsOpen, setDrawerIsOpen] = useState(false);
   const auth = useContext(AuthContext);
 
   
@@ -62,19 +104,41 @@ const MainNavigation = ({setCollapseSidebar, collapseSidebar}) => {
     setCollapseSidebar(!collapseSidebar)
   }
 
+  const openDrawerHandler = () => {
+    setDrawerIsOpen(true);
+  };
+
+  const closeDrawerHandler = () => {
+    setDrawerIsOpen(false);
+  };
+
+
+
   return (
     <>
     {auth.isLoggedIn &&
-          <MainHeader >
+          <>
+          {drawerIsOpen && <Backdrop closeDrawerHandler={closeDrawerHandler} />}
+          <SideDrawerMobile show={drawerIsOpen} closeDrawerHandler={closeDrawerHandler}>
+          <DrawerNav>
+          <NavLinks />
+          <Addings/>
+        </DrawerNav>
+          </SideDrawerMobile>
           
-  
-              <MenuButton onClick={toggleSidebar}><HiAdjustmentsHorizontal/></MenuButton>
+          
+          <MainHeader >
+              <MenuButton onClick={toggleSidebar}><HiAdjustmentsHorizontal/>
+              </MenuButton>
+
+              <MenuButton2>
+              <HiArrowNarrowRight onClick={openDrawerHandler}/>
+              </MenuButton2>
               
               <HeaderNav><NavLinks isSidebar={ false } /></HeaderNav>
               <StyledNavLink onClick={handleLogout}>Logout</StyledNavLink>
-            
-              
           </MainHeader>
+          </>
            }
         
     </>
