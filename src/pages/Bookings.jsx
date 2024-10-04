@@ -31,7 +31,7 @@ const Bookings = () => {
 
   const navigate = useNavigate();
   const handleAddClick = () => {
-    navigate('/addApartment');
+    navigate('/addBookings');
   };
 
   return (

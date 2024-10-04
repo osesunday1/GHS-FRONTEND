@@ -9,6 +9,8 @@ import Modal from '../styles/Modal';
 import EditGuestForm from './EditGuestForm'; // Assume this component exists for editing guests
 import styled from 'styled-components';
 
+
+
 const StyledContent = styled.div`
   display: grid;
   place-items: center;

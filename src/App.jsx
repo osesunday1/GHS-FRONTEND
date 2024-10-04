@@ -65,7 +65,7 @@ function App() {
   const login = useCallback((uid, token, expirationDate) => {
     setToken(token);
     setUserId(uid);
-    const tokenExpirationDate = expirationDate || new Date(new Date().getTime() + 5 * 60 * 1000); // default to 5 min expiry
+    const tokenExpirationDate = expirationDate || new Date(new Date().getTime() + 60 * 60 * 1000); // default to 1 hour expiry
     localStorage.setItem(
       'userData',
       JSON.stringify({ userId: uid, token: token, expiration: tokenExpirationDate.toISOString(), })
