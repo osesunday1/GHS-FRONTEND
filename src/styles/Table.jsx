@@ -5,7 +5,8 @@ const StyledTable = styled.table`
   max-width: 90%;
   margin: 20px auto;
   text-align: left;
-  border-radius: 20px;
+  border: 1px solid var(--blue);
+  
 
   th, td {
     padding: 12px;
