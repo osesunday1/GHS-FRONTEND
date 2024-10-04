@@ -26,6 +26,15 @@ const StyledTable = styled.table`
   tr:hover {
     background-color: #f1f1f1;
   }
+
+   /* Media query for phone view */
+   @media (max-width: 768px) {
+    /* Hide all columns except the first name, check-in date, and check-out date */
+    th:nth-child(n+4),
+    td:nth-child(n+4) {
+      display: none;
+    }
+  }
 `;
 
 const Table = ({ headers, data }) => {

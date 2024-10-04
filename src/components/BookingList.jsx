@@ -60,14 +60,30 @@ const BookingsList = () => {
     'Amount Paid', 'Caution Fee', 'Balance Due', 'Actions'
   ];
 
+  const StyledTable =styled.div`
+    margin: 0 auto;
+    justify-content: center;
+    align-items: center;
+
+    @media (max-width: 768px) {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+
+    }
+`
   const StyledContent =styled.div`
     margin: 0 auto;
     display: grid;
     justify-content: center;
     align-items: center;
+
+ 
 `
   return (
-    <div>
+    <StyledTable>
     <ToastContainer />
       <Table headers={headers} data={bookings.map((booking) => ({
         'Guest Name': `${booking.guest.firstName} ${booking.guest.lastName}`,
@@ -103,7 +119,7 @@ const BookingsList = () => {
           </StyledContent>
         </Modal>
       )}
-    </div>
+    </StyledTable>
   );
 };
 

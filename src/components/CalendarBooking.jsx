@@ -7,6 +7,8 @@ import styled from 'styled-components';
 import useFetch from './CustomHooks/useFetch';
 import Modal from '../styles/Modal';
 
+
+
 // Styled component for the calendar wrapper
 const StyledCalendarWrapper = styled.div`
   .fc {
@@ -30,15 +32,26 @@ const StyledCalendarWrapper = styled.div`
       background-color: #007bff;
       border: none;
       border-radius: 4px;
-      color: white;
+      color: #ffffff;
     }
 
     .fc-daygrid-day {
       &.fc-day-today {
         background-color: rgba(0, 123, 255, 0.1);
       }
+      
     }
   }
+
+  @media (max-width: 768px) {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+}
+
 `;
 
 const StyledContent = styled.div`

@@ -10,6 +10,21 @@ import styled from 'styled-components';
 import EditConsumptionForm from './EditConsumptionForm';
 import ConsumptionInvoice from './ConsumptionInvoice';
 
+const StyledTable =styled.div`
+margin: 0 auto;
+justify-content: center;
+align-items: center;
+
+@media (max-width: 768px) {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+}
+`
+
 const ConsumptionList = () => {
   const apiUrl = import.meta.env.VITE_BACKEND_URL;
   const { data: consumptions, loading, error } = useFetch(`${apiUrl}/v1/consumption`);
@@ -57,7 +72,7 @@ const ConsumptionList = () => {
   `;
 
   return (
-    <div>
+    <StyledTable>
       <Table headers={headers} data={consumptions.map((consumption) => ({
         'Guest Name': consumption.guestId
           ? `${consumption.guestId.firstName} ${consumption.guestId.lastName}`
@@ -98,7 +113,7 @@ const ConsumptionList = () => {
           <ConsumptionInvoice consumption={invoiceConsumption} />
         </Modal>
       )}
-    </div>
+    </StyledTable>
   );
 };
 
