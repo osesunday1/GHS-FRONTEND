@@ -11,6 +11,7 @@ const StyledCard = styled.div`
   padding: 1rem;
   overflow: hidden;
   background: white;
+  
 `;
 
 const Card2 = ({ className, style, children }) => {

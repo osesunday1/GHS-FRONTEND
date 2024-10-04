@@ -14,7 +14,7 @@ const StyledNavLinks = styled.ul`
   flex-direction: ${(props) => (props.isSidebar ? 'column' : 'row')};
   align-items: center;
   padding-left: ${(props) => (props.isSidebar ? '0' : '0')};
-
+  
   
 `;
 
@@ -51,9 +51,9 @@ const StyledNavLink = styled(NavLink)`
   align-items: center;
   text-align: center;
   width: 100%;
-  
   justify-content: flex-start;
   transition: background-color 0.3s ease, transform 0.3s ease;
+  color: var(--white) !important;
 
   &:hover,
   &:active,

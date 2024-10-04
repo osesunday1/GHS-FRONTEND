@@ -86,6 +86,7 @@ const StyledNavLink = styled(NavLink)`
   width: 100%;
   justify-content: flex-start;
   transition: background-color 0.3s ease, transform 0.3s ease;
+  color: var(--white) !important;
 
   &:hover,
   &:active,

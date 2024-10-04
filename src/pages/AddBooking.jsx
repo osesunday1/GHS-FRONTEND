@@ -12,6 +12,7 @@ const StyledHeadings = styled.div`
   margin: 0 auto;
   border-bottom: 2px solid var(--blue); /* Add bottom border */
   padding-bottom: 0px; /* Adjust padding as needed */
+  
 `
 const StyledH4 = styled.h4`
   padding: 0;
