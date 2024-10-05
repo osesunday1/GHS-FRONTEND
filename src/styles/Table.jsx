@@ -35,6 +35,15 @@ const StyledTable = styled.table`
     td:nth-child(n+4):not(:last-child) {
       display: none;
     }
+
+    width: 90%; /* Adjust width for mobile view */
+    max-width: 100%; /* Ensure it doesn't exceed the screen width */
+    margin: 10px auto; /* Reduce margin for mobile */
+
+    th, td {
+      padding: 6px; /* Reduce padding on mobile */
+    }
+
   }
 `;
 
