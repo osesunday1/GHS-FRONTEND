@@ -44,8 +44,9 @@ const Tops = styled.div`
   margin-bottom: 20px;
 
   @media (max-width: 768px) {
-    margin-bottom: 0px;
-    color: var(--white)
+    margin-top: 5%;
+    color: var(--white);
+    margin-bottom: 10px;
   }
 `;
 
