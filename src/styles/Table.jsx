@@ -31,8 +31,8 @@ const StyledTable = styled.table`
    /* Media query for phone view */
    @media (max-width: 768px) {
     /* Hide all columns except the first name, check-in date, and check-out date */
-    th:nth-child(n+4),
-    td:nth-child(n+4) {
+    th:nth-child(n+4):not(:last-child),
+    td:nth-child(n+4):not(:last-child) {
       display: none;
     }
   }
