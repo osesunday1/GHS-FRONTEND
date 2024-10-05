@@ -15,7 +15,7 @@ const Container = styled.section`
     padding: 0px 0;
     height: 100%;
     margin-top: 10%;
-    background-color: var(--greyColor2); 
+    background-color: var(--blue4); 
   }
   
 `;
@@ -45,6 +45,7 @@ const Tops = styled.div`
 
   @media (max-width: 768px) {
     margin-bottom: 0px;
+    color: var(--white)
   }
 `;
 
@@ -56,6 +57,9 @@ const StyledParagraph = styled.p`
     text-align: center; /* Center-align the text */
     margin-top: 7px;
     
+    @media (max-width: 768px) {
+    color: var(--white)
+  }
 `
 
 
