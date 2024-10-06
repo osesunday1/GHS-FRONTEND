@@ -7,18 +7,19 @@ import 'react-toastify/dist/ReactToastify.css';
 
 const Container = styled.section`
   background-color: var(--white);
-  background-size: 70px 70px;
   width: 100vw;
-  padding: 60px 0;
-
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* Added to vertically center content */
+  align-items: center; /* Added to horizontally center content */
+  
   @media (max-width: 768px) {
-    padding: 0px 0;
     height: 100%;
     margin-top: 10%;
-    background-color: var(--blue4); 
-
+    background-color: var(--blue4);
+    justify-content: center; /* Ensure content stays centered on mobile */
+    align-items: center; /* Ensure content stays centered on mobile */
   }
-  
 `;
 
 const Container2 = styled.section`
@@ -29,10 +30,14 @@ const Container2 = styled.section`
   justify-items: center;
   align-items: center;
   margin: 0 auto;
+  background-color: #812424;
 
   @media (max-width: 768px) {
+    width: 90%;
     flex-direction: column;
-
+    margin: 0 auto;
+    justify-content: center;
+    align-items: center;
   }
 `;
 
