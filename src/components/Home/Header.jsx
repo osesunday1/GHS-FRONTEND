@@ -13,6 +13,11 @@ const HeaderContainer = styled.header`
   left: 0;
   right: 0;
   z-index: 1000;
+
+  
+  @media (max-width: 768px) {
+    max-width: 100%;
+    }
 `;
 
 const Logo = styled.div`

@@ -15,6 +15,11 @@ height: 100vh;
 background-color: var(--primary-background);
 margin: 0 auto;
 align-content: center;
+
+
+@media (max-width: 768px) {
+    max-width: 100%;
+    }
 `
 
 const StyledContainer2= styled.div`
@@ -24,6 +29,10 @@ border-radius: 30px;
 background: var(--blue);
 margin: 0 auto;
 align-content: center;
+
+@media (max-width: 768px) {
+    max-width: 90%;
+    }
 `
 
 const StyledForm = styled.form`
