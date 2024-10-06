@@ -16,6 +16,7 @@ const Container = styled.section`
     height: 100%;
     margin-top: 10%;
     background-color: var(--blue4); 
+
   }
   
 `;
@@ -77,6 +78,10 @@ const StyledForm = styled.form`
   margin-bottom:5%;
   border: 1px solid var(--blue);
   background-color: var(--white); 
+
+  @media (max-width: 768px) {
+      width: 90%;
+    }
 
   
 `;
