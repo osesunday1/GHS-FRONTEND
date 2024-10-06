@@ -88,8 +88,7 @@ const GuestList = () => {
   return ( 
     <div>
       <Table headers={headers} data={guests.map((guest) => ({
-        'First Name': guest.firstName,
-        'Last Name': guest.lastName,
+        'Name': `${guest.firstName} ${guest.lastName}`,
         'Email': guest.email,
         'Phone': guest.phone,
         'Actions': (
