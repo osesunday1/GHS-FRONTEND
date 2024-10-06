@@ -30,7 +30,6 @@ const Container2 = styled.section`
   justify-items: center;
   align-items: center;
   margin: 0 auto;
-  background-color: #812424;
 
   @media (max-width: 768px) {
     width: 90%;
