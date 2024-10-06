@@ -48,6 +48,8 @@ const StyledInput = styled.input`
   padding: 0.75rem;
   border: 1px solid #ccc;
   border-radius: 4px;
+  width: 90%;
+  margin: 0 auto;
 `;
 
 const StyledButton = styled.button`
@@ -58,6 +60,8 @@ const StyledButton = styled.button`
   border-radius: 4px;
   cursor: pointer;
   font-weight: bolder;
+  width: 90%;
+  margin: 0 auto;
 
   &:hover {
     background-color: #c3c5c3;
