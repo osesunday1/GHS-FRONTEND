@@ -32,7 +32,7 @@ const Consumption = () => {
 
   const navigate = useNavigate();
   const handleAddClick = () => {
-    navigate('/addApartment');
+    navigate('/addConsumption');
   };
 
 
