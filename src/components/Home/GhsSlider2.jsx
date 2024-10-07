@@ -2,11 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { motion, AnimatePresence } from 'framer-motion';
 
-// Import images
-import car1 from '../../../public/b1.png';
-import car2 from '../../../public/b2.png';
-import car3 from '../../../public/b3.png';
-import car4 from '../../../public/b4.png';
+
 
 // Styled component for the Slider container
 const SliderContainer = styled.div`
@@ -46,7 +42,12 @@ const ArrowButton = styled.button`
   }
 `;
 
-const images = [car1, car2, car3, car4];
+const images = [
+  "https://res.cloudinary.com/dvh9j4utq/image/upload/v1728260242/GHS/WhatsApp_Image_2024-08-22_at_10.15.54_uiezuf.jpg",
+  "https://res.cloudinary.com/dvh9j4utq/image/upload/v1728260243/GHS/IMG_2165_rl6agb.jpg",
+  "https://res.cloudinary.com/dvh9j4utq/image/upload/v1728260244/GHS/IMG_2171_rl7i2d.jpg",
+  "https://res.cloudinary.com/dvh9j4utq/image/upload/v1728260243/GHS/IMG_2177_mpcdz1.jpg"
+];
 
 const variants = {
   enter: { opacity: 0 },
