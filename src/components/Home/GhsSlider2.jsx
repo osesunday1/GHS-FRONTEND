@@ -42,11 +42,12 @@ const ArrowButton = styled.button`
   }
 `;
 
+
 const images = [
-  "https://res.cloudinary.com/dvh9j4utq/image/upload/v1728260242/GHS/WhatsApp_Image_2024-08-22_at_10.15.54_uiezuf.jpg",
-  "https://res.cloudinary.com/dvh9j4utq/image/upload/v1728260243/GHS/IMG_2165_rl6agb.jpg",
-  "https://res.cloudinary.com/dvh9j4utq/image/upload/v1728260244/GHS/IMG_2171_rl7i2d.jpg",
-  "https://res.cloudinary.com/dvh9j4utq/image/upload/v1728260243/GHS/IMG_2177_mpcdz1.jpg"
+  "https://res.cloudinary.com/dvh9j4utq/image/upload/v1728259609/GHS/IMG_2153_optimized_uxi4zj.jpg",
+  "https://res.cloudinary.com/dvh9j4utq/image/upload/v1728259607/GHS/IMG_2179_optimized_rvuogf.jpg",
+  "https://res.cloudinary.com/dvh9j4utq/image/upload/v1728259606/GHS/IMG_2172_optimized_ryeaka.jpg",
+  "https://res.cloudinary.com/dvh9j4utq/image/upload/v1728259606/GHS/IMG_2164_optimized_vskuni.jpg"
 ];
 
 const variants = {
