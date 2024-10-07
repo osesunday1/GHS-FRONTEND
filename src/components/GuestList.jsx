@@ -80,7 +80,6 @@ const GuestList = () => {
   const headers = [
     'Name', 
     'Email', 
-    'Phone', 
     'Actions'
   ];
 
@@ -89,7 +88,6 @@ const GuestList = () => {
       <Table headers={headers} data={guests.map((guest) => ({
         'Name': `${guest.firstName} ${guest.lastName}`,
         'Email': guest.email,
-        'Phone': guest.phone,
         'Actions': (
           <div style={{ display: 'flex', gap: '10px' }}>
             <FaRegEdit 
