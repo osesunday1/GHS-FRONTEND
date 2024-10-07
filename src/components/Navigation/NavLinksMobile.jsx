@@ -93,6 +93,14 @@ const NavLinksMobile = () => {
         <StyledNavLink to="/addConsumption">ADD ORDER</StyledNavLink>
       </StyledLi>
 
+      <StyledLi>
+        <StyledNavLink to="/inventory">INVENTORY</StyledNavLink>
+      </StyledLi>
+
+      <StyledLi>
+        <StyledNavLink to="/addConsumption">ADD INVENTORY</StyledNavLink>
+      </StyledLi>
+
 
 
     

@@ -117,7 +117,7 @@ const SubMenu = styled.div`
 `;
 
 const Addings = ({ collapseSidebar }) => {
-  const [{ bookings, consumption, apartments }, dispatch] = useReducer(reducer, initialState);
+  const [{ bookings, consumption, apartments, inventory }, dispatch] = useReducer(reducer, initialState);
 
   return (
     <>
@@ -219,15 +219,34 @@ const Addings = ({ collapseSidebar }) => {
 
 
         {/* Apartment Management */}
-        <StyledLi onClick={() => dispatch({ type: "TOGGLE_APARTMENT" })} style={{ cursor: "pointer" }}>
+        <StyledLi onClick={() => dispatch({ type: "TOGGLE_INVENTORY" })} style={{ cursor: "pointer" }}>
           <StyledNavLink as="div">
             <StyledIcon collapseSidebar={collapseSidebar}><PiBuildingApartment /></StyledIcon>
-            {!collapseSidebar && "APARTMENTS"}
-            <Arrow isOpen={apartments}>
+            {!collapseSidebar && "PRODUCTS"}
+            <Arrow isOpen={inventory}>
               <IoIosArrowForward />
             </Arrow>
           </StyledNavLink>
         </StyledLi>
+
+         {/* Consumption submenu */}
+         <SubMenu isVisible={inventory}>
+
+          <StyledLi>
+            <StyledNavLink to="/inventory">
+              <StyledIcon collapseSidebar={collapseSidebar}><BsDot /></StyledIcon>
+              {!collapseSidebar && "PRODUCTS"}
+            </StyledNavLink>
+          </StyledLi>
+
+          <StyledLi>
+            <StyledNavLink to="/addInventory">
+              <StyledIcon collapseSidebar={collapseSidebar}><BsDot /></StyledIcon>
+              {!collapseSidebar && "ADD PRODUCT"}
+            </StyledNavLink>
+          </StyledLi>
+
+          </SubMenu>
 
         {/* Consumption submenu */}
         <SubMenu isVisible={apartments}>
