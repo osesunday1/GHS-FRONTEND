@@ -78,8 +78,7 @@ const GuestList = () => {
   if (error) return <div>{error}</div>;
 
   const headers = [
-    'First Name', 
-    'Last Name', 
+    'Name', 
     'Email', 
     'Phone', 
     'Actions'
