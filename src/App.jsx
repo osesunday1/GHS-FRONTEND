@@ -23,6 +23,7 @@ import EditConsumptionForm from './components/consumption/EditConsumptionForm';
 import Auth from './pages/Auth';
 import Home from './pages/Home';
 import InventoryForm from './components/Inventory/InventoryForm';
+import TimetableList from './components/Timetable/TimetableList';
 
 const StyledStructure = styled.div`
   display: ${({ isLoggedIn }) => (isLoggedIn ? 'grid' : 'block')}; 
@@ -134,6 +135,7 @@ function App() {
         <Route path="/guest" element={<Guest />} />
         <Route path="/apartment" element={<Apartments />} />
         <Route path="/addApartment" element={<AddApartment />} />
+        <Route path='/timeTable' element={<TimetableList />} />
         <Route path="/calendar" element={<Calendar />} />
         <Route path="/inventory" element={<Inventory />} />
         <Route path="/addInventory" element={<InventoryForm />} />

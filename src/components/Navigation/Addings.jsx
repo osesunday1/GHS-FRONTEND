@@ -7,7 +7,7 @@ import { IoIosArrowForward } from "react-icons/io";
 import { VscNotebook } from "react-icons/vsc";
 import { BsDot } from "react-icons/bs";
 import { PiBuildingApartment } from "react-icons/pi";
-
+import { GrSchedules } from "react-icons/gr";
 
 // Initial state for the reducer
 const initialState = {
@@ -32,6 +32,10 @@ function reducer(state, action) {
         return { ...state, 
           inventory: !state.inventory 
         };
+    case "TOGGLE_TIMETABLE":
+        return { ...state, 
+          timetable: !state.timetable
+          };
     case "TOGGLE_APARTMENT":
         return { ...state, 
             apartments: !state.apartments
@@ -117,7 +121,7 @@ const SubMenu = styled.div`
 `;
 
 const Addings = ({ collapseSidebar }) => {
-  const [{ bookings, consumption, apartments, inventory }, dispatch] = useReducer(reducer, initialState);
+  const [{ bookings, consumption, timetable, inventory }, dispatch] = useReducer(reducer, initialState);
 
   return (
     <>
@@ -248,25 +252,20 @@ const Addings = ({ collapseSidebar }) => {
 
           </SubMenu>
 
-        {/* Consumption submenu */}
-        <SubMenu isVisible={apartments}>
 
-        <StyledLi>
-          <StyledNavLink to="/apartment">
-            <StyledIcon collapseSidebar={collapseSidebar}><BsDot /></StyledIcon>
-            {!collapseSidebar && "APARTMENTS"}
+           {/* Timetable Management */}
+        <StyledLi style={{ cursor: "pointer" }}>
+          <StyledNavLink to="/timeTable">
+            <StyledIcon collapseSidebar={collapseSidebar}><GrSchedules /></StyledIcon>
+            {!collapseSidebar && "TIME TABLE"}
           </StyledNavLink>
         </StyledLi>
 
-        <StyledLi>
-          <StyledNavLink to="/addApartment">
-            <StyledIcon collapseSidebar={collapseSidebar}><BsDot /></StyledIcon>
-            {!collapseSidebar && "ADD APARTMENT"}
-          </StyledNavLink>
-        </StyledLi>
 
-        </SubMenu>
 
+
+
+       
 
 
 
