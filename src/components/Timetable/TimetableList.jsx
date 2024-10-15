@@ -259,7 +259,7 @@ const TimetableList = () => {
        </FormGroup>
  
        <FormGroup>
-         <StyledLabel>Task</StyledLabel>
+         <StyledLabel>Select Task</StyledLabel>
          <StyledSelect
            name="task"
            value={newEvent.task}
