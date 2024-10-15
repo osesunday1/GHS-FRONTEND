@@ -121,7 +121,7 @@ const SubMenu = styled.div`
 `;
 
 const Addings = ({ collapseSidebar }) => {
-  const [{ bookings, consumption, timetable, inventory }, dispatch] = useReducer(reducer, initialState);
+  const [{ bookings, consumption,  inventory }, dispatch] = useReducer(reducer, initialState);
 
   return (
     <>
