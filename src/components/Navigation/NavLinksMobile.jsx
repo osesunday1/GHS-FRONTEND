@@ -101,6 +101,10 @@ const NavLinksMobile = () => {
         <StyledNavLink to="/addConsumption">ADD INVENTORY</StyledNavLink>
       </StyledLi>
 
+      <StyledLi>
+        <StyledNavLink to="/timeTable">STAFF TIMETABLE</StyledNavLink>
+      </StyledLi>
+
 
 
     
