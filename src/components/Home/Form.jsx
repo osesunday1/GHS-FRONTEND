@@ -7,7 +7,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 const Container = styled.section`
   background-color: var(--white);
-  width: 100vw;
+  width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center; /* Added to vertically center content */

@@ -36,7 +36,7 @@ const CAPTIONS = [
 // Styled component for the slider container
 const SliderContainer = styled.div`
   height: 100vh;
-  width: 100vw;
+  width: 100%;
   display: block;
   margin: 0 auto;
   position: relative;

@@ -7,7 +7,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 const SliderContainer = styled.div`
   width: 100%;
   max-width: 800px;
-  height: 400px;
+  height: 400px;S
   overflow: hidden;
   position: relative;
   margin: 0 auto;

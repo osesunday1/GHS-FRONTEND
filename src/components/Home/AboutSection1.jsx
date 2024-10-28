@@ -8,7 +8,7 @@ import Modal from './../../styles/Modal';
 const Container = styled.section`
   background-color: var(--whiteColor); 
   background-size: 70px 70px;
-  width: 100vw;
+  width: 100%;
   padding: 60px 0;
 
   @media (max-width: 768px) {

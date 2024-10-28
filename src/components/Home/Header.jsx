@@ -6,7 +6,7 @@ const HeaderContainer = styled.header`
   justify-content: space-between;
   align-items: center;
   background-color: var(--primary-background);
-  padding: 1em 2em;
+  padding: 1em 1em;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   position: fixed;
   top: 0;
