@@ -61,7 +61,7 @@ const ConsumptionList = () => {
   if (error) return <div>{error}</div>;
 
   const headers = [
-    'Guest Name', 'Items', 'Total Amount', 'Date Consumed', 'Actions'
+    'Guest Name', 'Items', 'Total Amount', 'Actions'
   ];
 
   const StyledContent = styled.div`
@@ -77,11 +77,6 @@ const ConsumptionList = () => {
         'Guest Name': consumption.guestId
           ? `${consumption.guestId.firstName} ${consumption.guestId.lastName}`
           : 'Unknown Guest',
-        'Items': consumption.items.map(item => (
-          <div key={item.inventoryItemId._id}>
-            {item.inventoryItemId.item} - Qty: {item.quantity}, Amount: #{item.amount.toLocaleString()}
-          </div>
-        )),
         'Total Amount': `#${(consumption.totalAmount).toLocaleString()}`,
         'Date Consumed': new Date(consumption.createdAt).toLocaleDateString(),
         'Actions': (

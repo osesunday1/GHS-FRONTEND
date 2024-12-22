@@ -2,7 +2,6 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import usePost from '../CustomHooks/usePost';
 
-
 const FormContainer = styled.div`
   max-width: 85%;
   margin: 20px auto;
@@ -38,6 +37,14 @@ const Input = styled.input`
   box-sizing: border-box;
 `;
 
+const Select = styled.select`
+  width: 100%;
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+`;
+
 const Error = styled.div`
   color: red;
   margin-top: 10px;
@@ -59,18 +66,18 @@ const Button = styled.button`
 `;
 
 const InventoryForm = () => {
-    const apiUrl = import.meta.env.VITE_BACKEND_URL;
+  const apiUrl = import.meta.env.VITE_BACKEND_URL;
 
-    const { postData, loading, error } = usePost(`${apiUrl}/v1/inventory`);
+  const { postData, loading, error } = usePost(`${apiUrl}/v1/inventory`);
 
-    const initialFormData = {
-        item: '',
-        quantity: 1,
-        price: 1,
-      };
+  const initialFormData = {
+    item: '',
+    category: 'Perishable', // Default value
+    quantity: 1,
+    price: 1,
+  };
 
-
-  const [formData, setFormData] = useState(initialFormData )
+  const [formData, setFormData] = useState(initialFormData);
 
   const handleChange = (e) => {
     setFormData({
@@ -84,11 +91,9 @@ const InventoryForm = () => {
     const result = await postData(formData);
     if (result) {
       // Success handling
-      setFormData(initialFormData)
+      setFormData(initialFormData);
     }
   };
-
-
 
   return (
     <FormContainer>
@@ -103,6 +108,18 @@ const InventoryForm = () => {
               onChange={handleChange}
               required
             />
+          </FormField>
+          <FormField>
+            <Label>Category</Label>
+            <Select
+              name="category"
+              value={formData.category}
+              onChange={handleChange}
+              required
+            >
+              <option value="Perishable">Perishable</option>
+              <option value="Shelf-Stable">Shelf-Stable</option>
+            </Select>
           </FormField>
           <FormField>
             <Label>Quantity</Label>
@@ -124,9 +141,8 @@ const InventoryForm = () => {
               required
             />
           </FormField>
-          
         </FormGrid>
-        <Button type="submit">{loading ? 'Adding...': 'Add Product'}</Button>
+        <Button type="submit">{loading ? 'Adding...' : 'Add Product'}</Button>
         {error && <Error>{error}</Error>}
       </form>
     </FormContainer>
