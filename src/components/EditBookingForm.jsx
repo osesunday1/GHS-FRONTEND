@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import styled from 'styled-components';
+import useFetch from './CustomHooks/useFetch';
+
 
 const FormContainer = styled.div`
   max-width: 85%;
@@ -35,6 +37,13 @@ const Input = styled.input`
   border: 1px solid #ccc;
   box-sizing: border-box;
 `;
+const Select = styled.select`
+  width: 100%;
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+`;
 
 const Button = styled.button`
   width: 100%;
@@ -52,7 +61,9 @@ const Button = styled.button`
 `;
 
 const EditBookingForm = ({ booking, onSave}) => {
+  const apiUrl = import.meta.env.VITE_BACKEND_URL;
   const [formData, setFormData] = useState({ ...booking });
+  const { data: apartments} = useFetch(`${apiUrl}/v1/apartments`);
 
   const handleChange = (e) => {
     setFormData({
@@ -155,6 +166,22 @@ const EditBookingForm = ({ booking, onSave}) => {
               min="0"
               required
             />
+          </FormField>
+          <FormField fullWidth>
+            <Label>Apartment</Label>
+            <Select
+              name="apartmentId"
+              value={formData.apartmentId}
+              onChange={handleChange}
+              required
+            >
+              <option value="">Select an Apartment</option>
+              {apartments.map(apartment => (
+                <option key={apartment._id} value={apartment._id}>
+                  {apartment.name}
+                </option>
+              ))}
+            </Select>
           </FormField>
         </FormGrid>
         <Button type="submit">Save</Button>

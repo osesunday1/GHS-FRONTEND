@@ -3,6 +3,7 @@ import SearchField from '../components/Elements/SearchField';
 import Table from '../styles/Table';
 import { FaRegEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
+import { FaEye } from "react-icons/fa";
 import Modal from '../styles/Modal';
 import EditBookingForm from './EditBookingForm';
 
@@ -55,6 +56,19 @@ const StyledContent = styled.div`
   align-items: center;
 `;
 
+const DetailsModalContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  justify-content: center;
+  align-items: center;
+
+
+  p {
+    font-size: 16px;
+  }
+`;
+
 const BookingsList = () => {
   const apiUrl = import.meta.env.VITE_BACKEND_URL;
 
@@ -67,17 +81,24 @@ const BookingsList = () => {
   const url = `${apiUrl}/v1/bookings?page=${currentPage}&limit=${itemsPerPage}&guestName=${encodeURIComponent(searchTerm)}`;
 
   const { data: bookingsData, loading, error } = useFetch(url, `${currentPage}-${searchTerm}`);
-  console.log("Fetched Bookings Data:", bookingsData);
+  
 
   const { updateData } = useUpdate();
   const { deleteData } = useDelete();
 
   const [selectedBooking, setSelectedBooking] = useState(null);
   const [bookingToDelete, setBookingToDelete] = useState(null);
+  const [viewBooking, setViewBooking] = useState(null);
 
   const handleEdit = (booking) => {
     setSelectedBooking(booking);
   };
+
+  const handleView = (booking) => {
+    setViewBooking(booking);
+  };
+
+
 
   const handleDelete = (booking) => {
     setBookingToDelete(booking);
@@ -148,6 +169,8 @@ const BookingsList = () => {
             <div>
               <FaRegEdit style={{ cursor: 'pointer' }} onClick={() => handleEdit(booking)} />
               <MdDelete style={{ cursor: 'pointer', color: 'red' }} onClick={() => handleDelete(booking)} />
+              <FaEye style={{ cursor: 'pointer' }} onClick={() => handleView(booking)}  /> 
+   
 
             </div>
           ),
@@ -181,6 +204,23 @@ const BookingsList = () => {
               Delete
             </button>
           </StyledContent>
+        </Modal>
+      )}
+
+       {/* Details Modal */}
+       {viewBooking && (
+        <Modal show={true} onClose={() => setViewBooking(null)} title="Booking Details">
+          <DetailsModalContent>
+            <p><strong>Guest Name:</strong> {`${viewBooking.guest.firstName} ${viewBooking.guest.lastName}`}</p>
+            <p><strong>Check-In Date:</strong> {formatDate(viewBooking.checkInDate)}</p>
+            <p><strong>Check-Out Date:</strong> {formatDate(viewBooking.checkOutDate)}</p>
+            <p><strong>Total Days:</strong> {viewBooking.numberOfDays}</p>
+            <p><strong>Total Amount:</strong> #{viewBooking.totalAmount}</p>
+            <p><strong>Amount Paid:</strong> #{viewBooking.amountPaid}</p>
+            <p><strong>Balance:</strong> #{viewBooking.amountLeftToPay}</p>
+            <p><strong>Number of Rooms:</strong> {viewBooking.numberOfRooms}</p>
+            <p><strong>Apartment Name:</strong> {viewBooking.apartmentName}</p>
+          </DetailsModalContent>
         </Modal>
       )}
     </StyledTable>
