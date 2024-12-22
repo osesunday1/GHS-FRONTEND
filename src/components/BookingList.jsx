@@ -67,6 +67,7 @@ const BookingsList = () => {
   const url = `${apiUrl}/v1/bookings?page=${currentPage}&limit=${itemsPerPage}&guestName=${encodeURIComponent(searchTerm)}`;
 
   const { data: bookingsData, loading, error } = useFetch(url, `${currentPage}-${searchTerm}`);
+  console.log("Fetched Bookings Data:", bookingsData);
 
   const { updateData } = useUpdate();
   const { deleteData } = useDelete();
@@ -87,7 +88,7 @@ const BookingsList = () => {
 
     await deleteData(`${apiUrl}/v1/bookings/${bookingToDelete._id}`);
     setBookingToDelete(null);
-    setCurrentPage(1); // Reset to the first page after deletion
+    setCurrentPage(1); // Refresh or reset pagination
   };
 
   const handleSave = async (updatedBooking) => {
@@ -115,6 +116,15 @@ const BookingsList = () => {
 
   const totalPages = Math.ceil(bookingsData.length / itemsPerPage);
 
+  const formatDate = (isoDate) => {
+    const date = new Date(isoDate); // Parse the ISO date
+    const year = date.getUTCFullYear(); // Get year in UTC
+    const month = date.toLocaleString('default', { month: 'short', timeZone: 'UTC' }); // Month as short string
+    const day = String(date.getUTCDate()).padStart(2, '0'); // Day of the month in UTC
+  
+    return `${day} ${month} ${year}`; // Format as "DD MMM YYYY"
+  };
+
   return (
     <StyledTable>
       <ToastContainer />
@@ -131,12 +141,13 @@ const BookingsList = () => {
         headers={['Guest Name', 'Check-In Date', 'Check-Out Date', 'Actions']}
         data={bookingsData.map((booking) => ({
           'Guest Name': `${booking.guest.firstName} ${booking.guest.lastName}`,
-          'Check-In Date': new Date(booking.checkInDate).toLocaleDateString(),
-          'Check-Out Date': new Date(booking.checkOutDate).toLocaleDateString(),
+          'Check-In Date': formatDate(booking.checkInDate),
+          'Check-Out Date': formatDate(booking.checkOutDate),
           'Actions': (
             <div>
-              <button>Edit</button>
-              <button>Delete</button>
+              <FaRegEdit style={{ cursor: 'pointer' }} onClick={() => handleEdit(booking)} />
+              <MdDelete style={{ cursor: 'pointer', color: 'red' }} onClick={() => handleDelete(booking)} />
+
             </div>
           ),
         }))}
@@ -164,8 +175,8 @@ const BookingsList = () => {
       {bookingToDelete && (
         <Modal show={true} onClose={() => setBookingToDelete(null)} title="Confirm Deletion">
           <StyledContent>
-            <p>Are you sure you want to delete this booking?</p>
-            <button onClick={confirmDelete} style={{ backgroundColor: 'red', color: 'white' }}>
+            <p>Are you sure you want to delete this booking for{bookingToDelete.guest.firstName} {bookingToDelete.guest.lastName}?</p>
+            <button onClick={confirmDelete}style={{ backgroundColor: 'red', color: 'white' }}>
               Delete
             </button>
           </StyledContent>
