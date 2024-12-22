@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const FormContainer = styled.div`
@@ -21,7 +22,7 @@ const FormGrid = styled.div`
 
 const FormField = styled.div`
   margin-bottom: 15px;
-  grid-column: ${props => props.fullWidth ? 'span 2' : 'auto'};
+  grid-column: ${(props) => (props.fullWidth ? 'span 2' : 'auto')};
 `;
 
 const Label = styled.label`
@@ -67,7 +68,13 @@ const Error = styled.div`
 `;
 
 const EditConsumptionForm = ({ consumption, onSave }) => {
-  const [formData, setFormData] = useState({ ...consumption });
+  const [formData, setFormData] = useState({
+    ...consumption,
+    items: consumption.items.map((item) => ({
+      ...item,
+      inventoryItemId: item.inventoryItemId._id || item.inventoryItemId, // Ensure only the ID is stored
+    })),
+  });
   const [inventoryItems, setInventoryItems] = useState([]);
   const [error, setError] = useState(null);
 
@@ -83,26 +90,28 @@ const EditConsumptionForm = ({ consumption, onSave }) => {
       }
     };
     fetchInventoryItems();
-  }, []);
+  }, []); 
 
   const handleItemChange = (index, e) => {
     const updatedItems = [...formData.items];
     if (e.target.name === 'inventoryItemId') {
-      // Find the selected inventory item by ID
-      const selectedInventoryItem = inventoryItems.find(item => item._id === e.target.value);
-      // Update the inventory item at the specified index
-      updatedItems[index].inventoryItemId = selectedInventoryItem;
+      updatedItems[index] = {
+        ...updatedItems[index],
+        inventoryItemId: e.target.value, // Store only the ID of the selected item
+      };
     } else if (e.target.name === 'quantity') {
-      // Update the quantity at the specified index
-      updatedItems[index].quantity = e.target.value;
+      updatedItems[index] = {
+        ...updatedItems[index],
+        quantity: Number(e.target.value), // Ensure quantity is a number
+      };
     }
-    
     setFormData({ ...formData, items: updatedItems });
   };
+
   const handleAddItem = () => {
     setFormData({
       ...formData,
-      items: [...formData.items, { inventoryItemId: '', quantity: 1 }]
+      items: [...formData.items, { inventoryItemId: '', quantity: 1 }],
     });
   };
 
@@ -113,7 +122,22 @@ const EditConsumptionForm = ({ consumption, onSave }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    onSave(formData);
+    try {
+      const updatedData = await onSave(formData); // Await updated data from parent’s onSave function
+      setFormData({
+        ...updatedData, // Update formData with new data
+        items: updatedData.items.map((item) => ({
+          ...item,
+          inventoryItemId: item.inventoryItemId._id || item.inventoryItemId,
+        })),
+      });
+      toast.success('Changes saved successfully');
+      setError(null); // Clear any existing error
+    } catch (err) {
+      console.error('Error saving changes:', err);
+      setError('Failed to save changes. Please try again.');
+      toast.error('Failed to save changes. Please try again.');
+    }
   };
 
   return (
@@ -125,9 +149,7 @@ const EditConsumptionForm = ({ consumption, onSave }) => {
             <Input
               name="guestId"
               value={formData.guestId.firstName}
-              onChange={() => {}}
-              required
-              disabled={true}
+              disabled
             />
           </FormField>
           <FormField>
@@ -135,9 +157,7 @@ const EditConsumptionForm = ({ consumption, onSave }) => {
             <Input
               name="guestId"
               value={formData.guestId.lastName}
-              onChange={() => {}}
-              required
-              disabled={true}
+              disabled
             />
           </FormField>
 
@@ -147,15 +167,13 @@ const EditConsumptionForm = ({ consumption, onSave }) => {
                 <Label>Inventory Item</Label>
                 <Select
                   name="inventoryItemId"
-                  value={item.inventoryItemId._id} // Set the value to the ID of the selected item
+                  value={item.inventoryItemId}
                   onChange={(e) => handleItemChange(index, e)}
                   required
                 >
-                  {inventoryItems.map(inventoryItem => (
-                    <option 
-                      key={inventoryItem._id} 
-                      value={inventoryItem._id} // Match the ID here
-                    >
+                  <option value="">Select an item</option>
+                  {inventoryItems.map((inventoryItem) => (
+                    <option key={inventoryItem._id} value={inventoryItem._id}>
                       {`${inventoryItem.item} - #${inventoryItem.price}`}
                     </option>
                   ))}
@@ -173,7 +191,11 @@ const EditConsumptionForm = ({ consumption, onSave }) => {
                 />
               </FormField>
               {formData.items.length > 1 && (
-                <Button type="button" onClick={() => handleRemoveItem(index)} style={{ marginTop: '15px', backgroundColor: 'red' }}>
+                <Button
+                  type="button"
+                  onClick={() => handleRemoveItem(index)}
+                  style={{ marginTop: '15px', backgroundColor: 'red' }}
+                >
                   Remove Item
                 </Button>
               )}
