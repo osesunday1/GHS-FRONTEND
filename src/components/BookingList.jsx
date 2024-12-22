@@ -138,11 +138,12 @@ const BookingsList = () => {
 
       {/* Bookings Table */}
       <Table
-        headers={['Guest Name', 'Check-In Date', 'Check-Out Date', 'Actions']}
+        headers={['Guest Name', 'Check-In Date', 'Check-Out Date','Days', 'Actions']}
         data={bookingsData.map((booking) => ({
           'Guest Name': `${booking.guest.firstName} ${booking.guest.lastName}`,
           'Check-In Date': formatDate(booking.checkInDate),
           'Check-Out Date': formatDate(booking.checkOutDate),
+          'Days':booking.numberOfDays,
           'Actions': (
             <div>
               <FaRegEdit style={{ cursor: 'pointer' }} onClick={() => handleEdit(booking)} />
