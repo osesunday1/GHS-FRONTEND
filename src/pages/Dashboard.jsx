@@ -1,75 +1,113 @@
 import styled from "styled-components";
-import TotalBookings from "../components/Dashboard/TotalBookings";
-import TotalRevenue from "../components/Dashboard/TotalRevenue";
-import OccupancyRate from "../components/Dashboard/OccupancyRate";
-import TotalGuests from "../components/Dashboard/TotalGuest";
-import RepeatGuests from "../components/Dashboard/RepeatGuest";
-import RevenueComparisonChart from "../components/Dashboard/RevenueComparisonChart";
-import TotalAmountPaidChart from "../components/Dashboard/TotalAmountPaidChart";
+import BookingComparisonChart from "../components/Dashboard/BookingComparisonChart";
+import MonthlyRevenueCard from "../components/Dashboard/MonthlyRevenueCard";
+import MonthlyRevenueColumnStack from "../components/Dashboard/MonthlyRevenueColumnStack";
+import TotalMonthlyBookingsCard from "../components/Dashboard/TotalMonthlyBookingsCard";
+import MonthlyOccupiedGaugeChart from "../components/Dashboard/MonthlyOccupiedGuageChart";
 
-const Container =styled.div`
+// Dashboard container
+const Container = styled.div`
   width: 100%;
   margin: 0 auto;
-  justify-content: center;
-  align-items: center;
-`
-
-const Top = styled.section`
+  padding: 10px;
+  background: #f4f5f7;
   display: flex;
-  justify-content:center;
-  margin: 0 auto;
-  margin-bottom: 30px;
-  gap: 10px;
+  flex-direction: column;
+  gap: 40px;
+`;
 
-  @media (max-width: 768px) {
-    flex-direction: column;
-    margin: 0 auto;
-    align-items: center;
-    width: 90%;
-    margin-top: 10px;
+// Section headings
+const Heading = styled.h2`
+  text-align: center;
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 20px;
+`;
+
+// Styled card component
+const Card = styled.div`
+  display:flex;
+  background: white;
+  justify-content: center;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+`;
+const Card2 = styled.div`
+  display:flex;
+  background: white;
+  justify-content: center;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  width: 100%;
+  max-width: 800px;
+  text-align: center;
+
+   @media (max-width: 768px) {
+    max-width: 400px;
   }
 `;
 
-
-const Middle = styled.section`
-  width: 100%;
-  display: grid;
-  justify-content:center;
-  margin: 0 auto;
-  margin-bottom: 30px;
-  gap: 10px;
-  grid-template-columns: 1fr auto;
+// Section for cards and charts
+const Section = styled.section`
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
 
   @media (max-width: 768px) {
     flex-direction: column;
-    margin: 0 auto;
     align-items: center;
-    width: 90%;
-    display: none;
   }
-`
+`;
+
 
 
 const Dashboard = () => {
   return (
     <Container>
-    <Top>
-      <TotalBookings/>
-      <TotalRevenue/>  
-      <TotalGuests/>     
-    </Top>
+      {/* Top Section: Key Metrics */}
+      <div>
+        <Heading>Key Metrics</Heading>
+        <Section>
+          <Card>
+            <MonthlyRevenueCard />
+          </Card>
+          <Card>
+            <MonthlyOccupiedGaugeChart />
+          </Card>
+        </Section>
+      </div>
 
-    <Middle>
-    <RevenueComparisonChart/>
-    <TotalAmountPaidChart/>
-    </Middle>
+      {/* Middle Section: Charts */}
+      <div>
+        <Heading>Monthly Performance</Heading>
+        <Section>
+          <Card>
+            <MonthlyRevenueColumnStack />
+          </Card>
+          <Card>
+            <TotalMonthlyBookingsCard />
+          </Card>
+        </Section>
+      </div>
 
-    <Top>
-    <RepeatGuests/>
-    <OccupancyRate/>
-    </Top>
+      {/* Bottom Section: Comparisons */}
+      <div>
+        <Heading>Monthly Bookings by Apartments</Heading>
+        <Section>
+          <Card2>
+            <BookingComparisonChart />
+          </Card2>
+        </Section>
+      </div>
     </Container>
   );
-}
+};
 
 export default Dashboard;

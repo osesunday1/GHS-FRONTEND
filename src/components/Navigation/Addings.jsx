@@ -4,7 +4,8 @@ import styled from "styled-components";
 import { MdNoFood} from "react-icons/md";
 //import {  MdOutlineInventory } from "react-icons/md";
 import { IoIosArrowForward } from "react-icons/io";
-import { VscNotebook } from "react-icons/vsc";
+//import { VscNotebook } from "react-icons/vsc";
+import { MdBook } from "react-icons/md";
 import { BsDot } from "react-icons/bs";
 import { PiBuildingApartment } from "react-icons/pi";
 import { GrSchedules } from "react-icons/gr";
@@ -130,7 +131,7 @@ const Addings = ({ collapseSidebar }) => {
         {/* Bookings Management */}
         <StyledLi onClick={() => dispatch({ type: "TOGGLE_BOOKINGS" })} style={{ cursor: "pointer" }}>
           <StyledNavLink as="div">
-            <StyledIcon collapseSidebar={collapseSidebar}><VscNotebook /></StyledIcon>
+            <StyledIcon collapseSidebar={collapseSidebar}> {/*<VscNotebook /> */} <MdBook /></StyledIcon>
             {!collapseSidebar && "BOOKINGS"}
             <Arrow isOpen={bookings}>
               <IoIosArrowForward />
