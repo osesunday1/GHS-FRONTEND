@@ -14,6 +14,11 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   gap: 40px;
+
+  
+  @media (max-width: 768px) {
+    padding: 0px;
+  }
 `;
 
 // Section headings
@@ -23,6 +28,7 @@ const Heading = styled.h2`
   font-weight: bold;
   color: #333;
   margin-bottom: 20px;
+
 `;
 
 // Styled card component
@@ -36,6 +42,10 @@ const Card = styled.div`
   width: 100%;
   max-width: 400px;
   text-align: center;
+
+  @media (max-width: 768px) {
+    padding: 5px;
+  }
 `;
 const Card2 = styled.div`
   display:flex;
@@ -50,6 +60,7 @@ const Card2 = styled.div`
 
    @media (max-width: 768px) {
     max-width: 400px;
+    padding: 5px;
   }
 `;
 
