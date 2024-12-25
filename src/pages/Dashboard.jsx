@@ -17,7 +17,10 @@ const Container = styled.div`
 
   
   @media (max-width: 768px) {
+    justify-content: center;
+    align-items: center;
     padding: 0px;
+
   }
 `;
 
@@ -44,7 +47,7 @@ const Card = styled.div`
   text-align: center;
 
   @media (max-width: 768px) {
-    padding: 5px;
+    padding: 0px;
   }
 `;
 const Card2 = styled.div`
