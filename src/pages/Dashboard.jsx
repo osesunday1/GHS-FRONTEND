@@ -63,7 +63,7 @@ const Card2 = styled.div`
 
    @media (max-width: 768px) {
     max-width: 400px;
-    padding: 5px;
+    padding: 0px;
   }
 `;
 

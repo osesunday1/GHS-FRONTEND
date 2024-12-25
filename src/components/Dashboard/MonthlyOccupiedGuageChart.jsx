@@ -5,12 +5,20 @@ import styled from "styled-components";
 
 
 const CardContainer = styled.div`
-  width: 100%;
+  display: flex;
+  flex-direction: column;
+  width: 90%;
   max-width: 400px;
   margin: 0 auto;
   padding: 20px;
   border-radius: 8px;
   text-align: center;
+  
+
+  @media (max-width: 768px) {
+    padding: 0px;
+    justify-content: center;
+  }
 `;
 
 const Title = styled.h3`
@@ -21,9 +29,11 @@ const Title = styled.h3`
 `;
 
 const ChartContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: 100%;
-  height: auto;
-  max-width: 600px; /* Adjust the maximum width */
+  height: 300px; /* Set a specific height for centering */
   margin: 0 auto;
 `;
 

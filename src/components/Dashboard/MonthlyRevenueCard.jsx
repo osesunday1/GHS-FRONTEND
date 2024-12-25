@@ -2,12 +2,16 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 
 const CardContainer = styled.div`
-  width: 100%;
+  width: 90%;
   max-width: 400px;
   margin: 0 auto;
-  padding: 20px;
+  padding: 60px;
   border-radius: 8px;
   text-align: center;
+
+  @media (max-width: 768px) {
+    padding: 0px;
+  }
 `;
 
 const Title = styled.h3`
@@ -39,6 +43,10 @@ const SelectorContainer = styled.div`
     font-size: 14px;
     border: 1px solid #ccc;
     border-radius: 4px;
+  }
+
+ @media (max-width: 768px) {
+    padding: 1px 5px;
   }
 `;
 
