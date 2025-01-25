@@ -1,10 +1,10 @@
 const SearchField = ({ searchInput, setSearchInput, handleSearch }) => {
     return (
       
-      <div style={{ textAlign: 'center' }}>
+      <div style={{ textAlign: 'center', marginTop: '2%' }}>
         <input
           type="text"
-          placeholder="Search by product name"
+          placeholder="Search"
           value={searchInput}
           onChange={(e) => setSearchInput(e.target.value)} // Update the input value
           style={{

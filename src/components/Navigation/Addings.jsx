@@ -2,7 +2,6 @@ import { useReducer } from "react";
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 import { MdNoFood} from "react-icons/md";
-//import {  MdOutlineInventory } from "react-icons/md";
 import { IoIosArrowForward } from "react-icons/io";
 //import { VscNotebook } from "react-icons/vsc";
 import { MdBook } from "react-icons/md";
@@ -13,25 +12,30 @@ import { GrSchedules } from "react-icons/gr";
 // Initial state for the reducer
 const initialState = {
   bookings: false,
-  consumption: false,
   inventory: false,
+  product: false,
+  expenses: false,
   apartments: false
 };
 
 // Reducer function to manage visibility
 function reducer(state, action) {
   switch (action.type) {
-    case "TOGGLE_CONSUMPTION":
+    case "TOGGLE_INVENTORY":
       return { ...state, 
-        consumption: !state.consumption 
+        inventory: !state.inventory 
       };
     case "TOGGLE_BOOKINGS":
       return { ...state, 
         bookings: !state.bookings 
       };
-    case "TOGGLE_INVENTORY":
+    case "TOGGLE_PRODUCT":
         return { ...state, 
-          inventory: !state.inventory 
+          product: !state.product 
+        };
+    case "TOGGLE_EXPENSES":
+        return { ...state, 
+          expenses: !state.expenses 
         };
     case "TOGGLE_TIMETABLE":
         return { ...state, 
@@ -122,7 +126,7 @@ const SubMenu = styled.div`
 `;
 
 const Addings = ({ collapseSidebar }) => {
-  const [{ bookings, consumption,  inventory }, dispatch] = useReducer(reducer, initialState);
+  const [{ bookings, inventory,  product, expenses }, dispatch] = useReducer(reducer, initialState);
 
   return (
     <>
@@ -158,21 +162,28 @@ const Addings = ({ collapseSidebar }) => {
 
         </SubMenu>
 
-        {/* 
 
-        
+        {/* Inventory Management */}
         <StyledLi onClick={() => dispatch({ type: "TOGGLE_INVENTORY" })} style={{ cursor: "pointer" }}>
           <StyledNavLink as="div">
-            <StyledIcon collapseSidebar={collapseSidebar}><MdOutlineInventory /></StyledIcon>
-            {!collapseSidebar && "INVENTORY"}
+            <StyledIcon collapseSidebar={collapseSidebar}><MdNoFood /></StyledIcon>
+            {!collapseSidebar && "INVENTORIES"}
             <Arrow isOpen={inventory}>
               <IoIosArrowForward />
             </Arrow>
           </StyledNavLink>
         </StyledLi>
 
-     
+        {/* Inventory submenu */}
         <SubMenu isVisible={inventory}>
+
+          <StyledLi>
+            <StyledNavLink to="/inventory">
+              <StyledIcon collapseSidebar={collapseSidebar}><BsDot /></StyledIcon>
+              {!collapseSidebar && "INVENTORY"}
+            </StyledNavLink>
+          </StyledLi>
+
           <StyledLi>
             <StyledNavLink to="/addInventory">
               <StyledIcon collapseSidebar={collapseSidebar}><BsDot /></StyledIcon>
@@ -180,42 +191,33 @@ const Addings = ({ collapseSidebar }) => {
             </StyledNavLink>
           </StyledLi>
 
-          <StyledLi>
-          <StyledNavLink to="/inventory">
-            <StyledIcon collapseSidebar={collapseSidebar}><BsDot /></StyledIcon>
-            {!collapseSidebar && "INVENTORY"}
-          </StyledNavLink>
-        </StyledLi>
         </SubMenu>
 
-*/}
-        
-
-        {/* Consumption Management */}
-        <StyledLi onClick={() => dispatch({ type: "TOGGLE_CONSUMPTION" })} style={{ cursor: "pointer" }}>
+                {/* Expenses Management */}
+        <StyledLi onClick={() => dispatch({ type: "TOGGLE_EXPENSES" })} style={{ cursor: "pointer" }}>
           <StyledNavLink as="div">
             <StyledIcon collapseSidebar={collapseSidebar}><MdNoFood /></StyledIcon>
-            {!collapseSidebar && "CONSUMPTIONS"}
-            <Arrow isOpen={consumption}>
+            {!collapseSidebar && "EXPENSES"}
+            <Arrow isOpen={expenses}>
               <IoIosArrowForward />
             </Arrow>
           </StyledNavLink>
         </StyledLi>
 
-        {/* Consumption submenu */}
-        <SubMenu isVisible={consumption}>
+        {/* Inventory submenu */}
+        <SubMenu isVisible={expenses}>
 
           <StyledLi>
-            <StyledNavLink to="/consumption">
+            <StyledNavLink to="/expenses">
               <StyledIcon collapseSidebar={collapseSidebar}><BsDot /></StyledIcon>
-              {!collapseSidebar && "CONSUMPTION"}
+              {!collapseSidebar && "EXPENSES"}
             </StyledNavLink>
           </StyledLi>
 
           <StyledLi>
-            <StyledNavLink to="/addConsumption">
+            <StyledNavLink to="/addExpenses">
               <StyledIcon collapseSidebar={collapseSidebar}><BsDot /></StyledIcon>
-              {!collapseSidebar && "ADD CONSUMPTION"}
+              {!collapseSidebar && "ADD EXPENSES"}
             </StyledNavLink>
           </StyledLi>
 
@@ -224,28 +226,28 @@ const Addings = ({ collapseSidebar }) => {
 
 
         {/* Apartment Management */}
-        <StyledLi onClick={() => dispatch({ type: "TOGGLE_INVENTORY" })} style={{ cursor: "pointer" }}>
+        <StyledLi onClick={() => dispatch({ type: "TOGGLE_PRODUCT" })} style={{ cursor: "pointer" }}>
           <StyledNavLink as="div">
             <StyledIcon collapseSidebar={collapseSidebar}><PiBuildingApartment /></StyledIcon>
             {!collapseSidebar && "PRODUCTS"}
-            <Arrow isOpen={inventory}>
+            <Arrow isOpen={product}>
               <IoIosArrowForward />
             </Arrow>
           </StyledNavLink>
         </StyledLi>
 
-         {/* Consumption submenu */}
-         <SubMenu isVisible={inventory}>
+         {/* Inventory submenu */}
+         <SubMenu isVisible={product}>
 
           <StyledLi>
-            <StyledNavLink to="/inventory">
+            <StyledNavLink to="/product">
               <StyledIcon collapseSidebar={collapseSidebar}><BsDot /></StyledIcon>
               {!collapseSidebar && "PRODUCTS"}
             </StyledNavLink>
           </StyledLi>
 
           <StyledLi>
-            <StyledNavLink to="/addInventory">
+            <StyledNavLink to="/addProduct">
               <StyledIcon collapseSidebar={collapseSidebar}><BsDot /></StyledIcon>
               {!collapseSidebar && "ADD PRODUCT"}
             </StyledNavLink>

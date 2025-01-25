@@ -9,20 +9,22 @@ import Dashboard from './pages/Dashboard';
 import Bookings from './pages/Bookings';
 import Guest from './pages/Guest';
 import Apartments from './pages/Apartments';
-import Inventory from './pages/Inventory';
+import Product from './pages/Product';
 import styled from 'styled-components';
-import Consumption from './pages/Consumption';
+import Inventory from './pages/Inventory';
+import Expenses from './pages/Expenses';
+import ExpensesForm from './components/Expenses/ExpensesForm';
 import MainNavigation from './components/Navigation/MainNavigation';
 import SideDrawer from './components/Navigation/SideDrawer';
 import AddBooking from './pages/AddBooking';
 import AddApartment from './pages/AddApartment';
 import Addings from './components/Navigation/Addings';
 import Calendar from './pages/Calendar';
-import ConsumptionForm from './components/consumption/ConsumptionForm';
-import EditConsumptionForm from './components/consumption/EditConsumptionForm';
+import InventoryForm from './components/inventory/InventoryForm';
+import EditInventoryForm from './components/inventory/EditInventoryForm';
 import Auth from './pages/Auth';
 import Home from './pages/Home';
-import InventoryForm from './components/Inventory/InventoryForm';
+import ProductForm from './components/Product/ProductForm';
 import TimetableList from './components/Timetable/TimetableList';
 
 const StyledStructure = styled.div`
@@ -137,11 +139,13 @@ function App() {
         <Route path="/addApartment" element={<AddApartment />} />
         <Route path='/timeTable' element={<TimetableList />} />
         <Route path="/calendar" element={<Calendar />} />
+        <Route path="/product" element={<Product />} />
+        <Route path="/addProduct" element={<ProductForm />} />
         <Route path="/inventory" element={<Inventory />} />
         <Route path="/addInventory" element={<InventoryForm />} />
-        <Route path="/consumption" element={<Consumption />} />
-        <Route path="/addConsumption" element={<ConsumptionForm />} />
-        <Route path="/consumption/edit/:id" element={<EditConsumptionForm />} />
+        <Route path="/inventory/edit/:id" element={<EditInventoryForm />} />
+        <Route path="/expenses" element={<Expenses />} />
+        <Route path="/addExpenses" element={<ExpensesForm />} />
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     );

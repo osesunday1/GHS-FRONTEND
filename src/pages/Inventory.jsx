@@ -1,10 +1,12 @@
-import InventoryList from "../components/Inventory/InventoryList";
+
 import styled from "styled-components";
-import { useState } from "react";
-import Modal from "../styles/Modal";
 import { MdAddBox } from "react-icons/md";
 import { useNavigate  } from "react-router-dom";
+import InventoryList from "../components/inventory/InventoryList";
 
+const StyledBooking= styled.div`
+  margin: 0 auto;
+`
 
 const StyledHeadings = styled.div`
   display: flex;
@@ -15,8 +17,7 @@ const StyledHeadings = styled.div`
   margin: 0 auto;
   border-bottom: 2px solid var(--blue); /* Add bottom border */
   padding-bottom: 0px; /* Adjust padding as needed */
-`;
-
+`
 const StyledH4 = styled.h4`
   padding: 0;
   margin-bottom: 0;
@@ -26,28 +27,25 @@ const StyledH4 = styled.h4`
 `;
 
 
-const Inventory = () => {
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
+const Inventory = () => {
 
   const navigate = useNavigate();
   const handleAddClick = () => {
     navigate('/addInventory');
   };
-  const closeModal = () => setIsModalOpen(false);
-  
+
 
   return (
     <>
-     <StyledHeadings>
-        <StyledH4>PRODUCTS</StyledH4>
+    <StyledBooking>
+        <StyledHeadings>
+        <StyledH4>INVENTORY</StyledH4>
         <StyledH4><MdAddBox onClick={handleAddClick}/></StyledH4>
       </StyledHeadings>
-    <InventoryList/>
+      <InventoryList/>
+    </StyledBooking>
 
-    <Modal show={isModalOpen} onClose={closeModal}>
-      
-      </Modal>
     </>
   );
 }

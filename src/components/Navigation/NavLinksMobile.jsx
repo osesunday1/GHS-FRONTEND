@@ -86,19 +86,28 @@ const NavLinksMobile = () => {
       </StyledLi>
 
       <StyledLi>
-        <StyledNavLink to="/consumption">FOOD ORDERS</StyledNavLink>
-      </StyledLi>
-
-      <StyledLi>
-        <StyledNavLink to="/addConsumption">ADD ORDER</StyledNavLink>
-      </StyledLi>
-
-      <StyledLi>
         <StyledNavLink to="/inventory">INVENTORY</StyledNavLink>
       </StyledLi>
 
       <StyledLi>
-        <StyledNavLink to="/addConsumption">ADD INVENTORY</StyledNavLink>
+        <StyledNavLink to="/addInventory">ADD INVENTORY</StyledNavLink>
+      </StyledLi>
+
+      <StyledLi>
+        <StyledNavLink to="/expenses">EXPENSES</StyledNavLink>
+      </StyledLi>
+
+      <StyledLi>
+        <StyledNavLink to="/addInventory">ADD EXPENSES</StyledNavLink>
+      </StyledLi>
+
+
+      <StyledLi>
+        <StyledNavLink to="/product">PRODUCT</StyledNavLink>
+      </StyledLi>
+
+      <StyledLi>
+        <StyledNavLink to="/addInventory">ADD PRODUCT</StyledNavLink>
       </StyledLi>
 
       <StyledLi>

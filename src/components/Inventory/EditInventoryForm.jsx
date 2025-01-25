@@ -1,5 +1,8 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import styled from 'styled-components';
+import axios from 'axios';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const FormContainer = styled.div`
   max-width: 85%;
@@ -19,7 +22,7 @@ const FormGrid = styled.div`
 
 const FormField = styled.div`
   margin-bottom: 15px;
-  grid-column: ${props => props.fullWidth ? 'span 2' : 'auto'};
+  grid-column: ${(props) => (props.fullWidth ? 'span 2' : 'auto')};
 `;
 
 const Label = styled.label`
@@ -29,6 +32,14 @@ const Label = styled.label`
 `;
 
 const Input = styled.input`
+  width: 100%;
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+`;
+
+const Select = styled.select`
   width: 100%;
   padding: 8px;
   border-radius: 4px;
@@ -51,19 +62,82 @@ const Button = styled.button`
   }
 `;
 
-const EditInventoryForm = ({ inventory, onSave }) => {
-  const [formData, setFormData] = useState({ ...inventory });
+const Error = styled.div`
+  color: red;
+  margin-top: 10px;
+`;
 
-  const handleChange = (e) => {
+const EditInventoryForm = ({ inventory, onSave }) => {
+  const [formData, setFormData] = useState({
+    ...inventory,
+    items: inventory.items.map((item) => ({
+      ...item,
+      inventoryItemId: item.inventoryItemId._id || item.inventoryItemId, // Ensure only the ID is stored
+    })),
+  });
+  const [inventoryItems, setInventoryItems] = useState([]);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchInventoryItems = async () => {
+      try {
+        const apiUrl = import.meta.env.VITE_BACKEND_URL;
+        const inventoryResponse = await axios.get(`${apiUrl}/v1/inventory`);
+        setInventoryItems(inventoryResponse.data.data);
+      } catch (err) {
+        console.error('Error fetching inventory items:', err);
+        setError('Failed to load inventory items. Please try again.');
+      }
+    };
+    fetchInventoryItems();
+  }, []); 
+
+  const handleItemChange = (index, e) => {
+    const updatedItems = [...formData.items];
+    if (e.target.name === 'inventoryItemId') {
+      updatedItems[index] = {
+        ...updatedItems[index],
+        inventoryItemId: e.target.value, // Store only the ID of the selected item
+      };
+    } else if (e.target.name === 'quantity') {
+      updatedItems[index] = {
+        ...updatedItems[index],
+        quantity: Number(e.target.value), // Ensure quantity is a number
+      };
+    }
+    setFormData({ ...formData, items: updatedItems });
+  };
+
+  const handleAddItem = () => {
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value,
+      items: [...formData.items, { inventoryItemId: '', quantity: 1 }],
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleRemoveItem = (index) => {
+    const updatedItems = formData.items.filter((_, i) => i !== index);
+    setFormData({ ...formData, items: updatedItems });
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    onSave(formData);
+    try {
+      const updatedData = await onSave(formData); // Await updated data from parent’s onSave function
+      setFormData({
+        ...updatedData, // Update formData with new data
+        items: updatedData.items.map((item) => ({
+          ...item,
+          inventoryItemId: item.inventoryItemId._id || item.inventoryItemId,
+        })),
+      });
+      toast.success('Changes saved successfully');
+      setError(null); // Clear any existing error
+    } catch (err) {
+      console.error('Error saving changes:', err);
+      setError('Failed to save changes. Please try again.');
+      toast.error('Failed to save changes. Please try again.');
+    }
   };
 
   return (
@@ -71,38 +145,71 @@ const EditInventoryForm = ({ inventory, onSave }) => {
       <form onSubmit={handleSubmit}>
         <FormGrid>
           <FormField>
-            <Label>Product</Label>
+            <Label>Guest Name</Label>
             <Input
-              type="text"
-              name="item"
-              value={formData.item}
-              onChange={handleChange}
-              required
+              name="guestId"
+              value={formData.guestId.firstName}
+              disabled
             />
           </FormField>
           <FormField>
-            <Label>Quantity</Label>
+            <Label>Last Name</Label>
             <Input
-              type="number"
-              name="quantity"
-              value={formData.quantity}
-              onChange={handleChange}
-              required
+              name="guestId"
+              value={formData.guestId.lastName}
+              disabled
             />
           </FormField>
-          <FormField>
-            <Label>Price</Label>
-            <Input
-              type="number"
-              name="price"
-              value={formData.price}
-              onChange={handleChange}
-              required
-            />
+
+          {formData.items.map((item, index) => (
+            <div key={index}>
+              <FormField fullWidth>
+                <Label>Inventory Item</Label>
+                <Select
+                  name="inventoryItemId"
+                  value={item.inventoryItemId}
+                  onChange={(e) => handleItemChange(index, e)}
+                  required
+                >
+                  <option value="">Select an item</option>
+                  {inventoryItems.map((inventoryItem) => (
+                    <option key={inventoryItem._id} value={inventoryItem._id}>
+                      {`${inventoryItem.item} - #${inventoryItem.price}`}
+                    </option>
+                  ))}
+                </Select>
+              </FormField>
+              <FormField>
+                <Label>Quantity</Label>
+                <Input
+                  type="number"
+                  name="quantity"
+                  value={item.quantity}
+                  onChange={(e) => handleItemChange(index, e)}
+                  min="1"
+                  required
+                />
+              </FormField>
+              {formData.items.length > 1 && (
+                <Button
+                  type="button"
+                  onClick={() => handleRemoveItem(index)}
+                  style={{ marginTop: '15px', backgroundColor: 'red' }}
+                >
+                  Remove Item
+                </Button>
+              )}
+            </div>
+          ))}
+
+          <FormField fullWidth>
+            <Button type="button" onClick={handleAddItem}>
+              Add Another Item
+            </Button>
           </FormField>
-          
         </FormGrid>
-        <Button type="submit">Save</Button>
+        <Button type="submit">Save Changes</Button>
+        {error && <Error>{error}</Error>}
       </form>
     </FormContainer>
   );

@@ -1,10 +1,13 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import styled from 'styled-components';
+import axios from 'axios';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import usePost from '../CustomHooks/usePost';
-
+import InventoryDropdown from './InventoryDropdown'
 const FormContainer = styled.div`
   max-width: 85%;
-  margin: 20px auto;
+  margin: 0 auto;
   padding: 20px;
   border: 1px solid #ccc;
   border-radius: 8px;
@@ -45,11 +48,6 @@ const Select = styled.select`
   box-sizing: border-box;
 `;
 
-const Error = styled.div`
-  color: red;
-  margin-top: 10px;
-`;
-
 const Button = styled.button`
   width: 100%;
   padding: 10px;
@@ -65,19 +63,60 @@ const Button = styled.button`
   }
 `;
 
+const Error = styled.div`
+  color: red;
+  margin-top: 10px;
+`;
+
+
 const InventoryForm = () => {
   const apiUrl = import.meta.env.VITE_BACKEND_URL;
 
   const { postData, loading, error } = usePost(`${apiUrl}/v1/inventory`);
 
   const initialFormData = {
-    item: '',
-    category: 'Perishable', // Default value
-    quantity: 1,
-    price: 1,
+    guestId: '',
+    items: [{ productItemId: '', quantity: 1 }],
   };
 
   const [formData, setFormData] = useState(initialFormData);
+  const [guests, setGuests] = useState([]);
+  const [productItems, setProductItems] = useState([]);
+  const [error2, setError2] = useState(null);
+
+  useEffect(() => {
+    const fetchGuestsAndProducts = async () => {
+      try {
+        const guestsResponse = await axios.get(`${apiUrl}/v1/guests`);
+        setGuests(guestsResponse.data.data);
+
+        const productResponse = await axios.get(`${apiUrl}/v1/product`);
+        setProductItems(productResponse.data.data);
+      } catch (err) {
+        toast.error('Failed to load guests or inventory items.');
+        setError2('Failed to load guests or inventory items. Please try again.');
+      }
+    };
+    fetchGuestsAndProducts();
+  }, []);
+
+  const handleItemChange = (index, e) => {
+    const updatedItems = [...formData.items];
+    updatedItems[index][e.target.name] = e.target.value;
+    setFormData({ ...formData, items: updatedItems });
+  };
+
+  const handleAddItem = () => {
+    setFormData({
+      ...formData,
+      items: [...formData.items, { productItemId: '', quantity: 1 }],
+    });
+  };
+
+  const handleRemoveItem = (index) => {
+    const updatedItems = formData.items.filter((_, i) => i !== index);
+    setFormData({ ...formData, items: updatedItems });
+  };
 
   const handleChange = (e) => {
     setFormData({
@@ -90,59 +129,66 @@ const InventoryForm = () => {
     e.preventDefault();
     const result = await postData(formData);
     if (result) {
-      // Success handling
+      toast.success('Inventory added successfully!');
       setFormData(initialFormData);
     }
   };
 
   return (
     <FormContainer>
+      <ToastContainer />
       <form onSubmit={handleSubmit}>
         <FormGrid>
-          <FormField>
-            <Label>Product</Label>
-            <Input
-              type="text"
-              name="item"
-              value={formData.item}
-              onChange={handleChange}
-              required
-            />
-          </FormField>
-          <FormField>
-            <Label>Category</Label>
+          <FormField fullWidth>
+            <Label>Guest</Label>
             <Select
-              name="category"
-              value={formData.category}
+              name="guestId"
+              value={formData.guestId}
               onChange={handleChange}
               required
             >
-              <option value="Perishable">Perishable</option>
-              <option value="Shelf-Stable">Shelf-Stable</option>
+              <option value="">Select a Guest</option>
+              {guests.map((guest) => (
+                <option key={guest._id} value={guest._id}>
+                  {guest.firstName} {guest.lastName}
+                </option>
+              ))}
             </Select>
           </FormField>
-          <FormField>
-            <Label>Quantity</Label>
-            <Input
-              type="number"
-              name="quantity"
-              value={formData.quantity}
-              onChange={handleChange}
-              required
-            />
-          </FormField>
-          <FormField>
-            <Label>Price</Label>
-            <Input
-              type="number"
-              name="price"
-              value={formData.price}
-              onChange={handleChange}
-              required
-            />
+
+          {formData.items.map((item, index) => (
+  <div key={index}>
+    <InventoryDropdown
+      item={item}
+      index={index}
+      handleItemChange={handleItemChange}
+    />
+    <FormField>
+      <Label>Quantity</Label>
+      <Input
+        type="number"
+        name="quantity"
+        value={item.quantity}
+        onChange={(e) => handleItemChange(index, e)}
+        min="1"
+        required
+      />
+    </FormField>
+    {formData.items.length > 1 && (
+      <Button type="button" onClick={() => handleRemoveItem(index)}>
+        Remove Item
+      </Button>
+    )}
+  </div>
+))}
+
+          <FormField fullWidth>
+            <Button type="button" onClick={handleAddItem}>
+              Add Another Item
+            </Button>
           </FormField>
         </FormGrid>
-        <Button type="submit">{loading ? 'Adding...' : 'Add Product'}</Button>
+        <Button type="submit">{loading ? 'Adding...' : 'Add Inventory'}</Button>
         {error && <Error>{error}</Error>}
       </form>
     </FormContainer>
