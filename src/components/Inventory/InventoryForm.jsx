@@ -188,7 +188,7 @@ const InventoryForm = () => {
             </Button>
           </FormField>
         </FormGrid>
-        <Button type="submit">{loading ? 'Adding...' : 'Add Inventory'}</Button>
+        <Button type="submit">{loading ? 'Adding..' : 'Add Inventory'}</Button>
         {error && <Error>{error}</Error>}
       </form>
     </FormContainer>
