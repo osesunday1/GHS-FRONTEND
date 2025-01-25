@@ -270,7 +270,7 @@ const BookingForm = () => {
           </FormField>
         </FormGrid>
         <Button type="submit">
-          {loading ? 'Creatting...': 'Create Booking'}
+          {loading ? 'Creating...': 'Create Booking'}
           
           </Button>
         {error && <Error>{error}</Error>}
