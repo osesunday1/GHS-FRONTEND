@@ -13,7 +13,7 @@ import Product from './pages/Product';
 import styled from 'styled-components';
 import Inventory from './pages/Inventory';
 //import InventoryForm from './components/inventory/InventoryForm';
-import EditInventoryForm from './components/inventory/EditInventoryForm';
+//import EditInventoryForm from './components/inventory/EditInventoryForm';
 import Expenses from './pages/Expenses';
 import ExpensesForm from './components/Expenses/ExpensesForm';
 import MainNavigation from './components/Navigation/MainNavigation';
@@ -146,7 +146,7 @@ function App() {
         <Route path="/addProduct" element={<ProductForm />} />
         <Route path="/inventory" element={<Inventory />} />
         {/*<Route path="/addInventory" element={<InventoryForm />} />*/}
-        <Route path="/inventory/edit/:id" element={<EditInventoryForm />} />
+        {/*<Route path="/inventory/edit/:id" element={<EditInventoryForm />} />*/}
         <Route path="/expenses" element={<Expenses />} />
         <Route path="/addExpenses" element={<ExpensesForm />} />
         <Route path="*" element={<Navigate to="/" />} />
