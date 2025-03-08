@@ -11,7 +11,7 @@ import Guest from './pages/Guest';
 import Apartments from './pages/Apartments';
 import Product from './pages/Product';
 import styled from 'styled-components';
-import Inventory from './pages/Inventory';
+//import Inventory from './pages/Inventory';
 //import InventoryForm from './components/inventory/InventoryForm';
 //import EditInventoryForm from './components/inventory/EditInventoryForm';
 import Expenses from './pages/Expenses';
@@ -144,7 +144,7 @@ function App() {
         <Route path="/calendar" element={<Calendar />} />
         <Route path="/product" element={<Product />} />
         <Route path="/addProduct" element={<ProductForm />} />
-        <Route path="/inventory" element={<Inventory />} />
+         {/*<Route path="/inventory" element={<Inventory />} />
         {/*<Route path="/addInventory" element={<InventoryForm />} />*/}
         {/*<Route path="/inventory/edit/:id" element={<EditInventoryForm />} />*/}
         <Route path="/expenses" element={<Expenses />} />
