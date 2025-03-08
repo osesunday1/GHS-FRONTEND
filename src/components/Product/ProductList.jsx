@@ -85,7 +85,8 @@ const ProductList = () => {
       setLoading(true);
       setError(null);
 
-      const url = `${apiUrl}/v1/product?page=${currentPage}&limit=${itemsPerPage}&item=${encodeURIComponent(searchTerm)}&category=${encodeURIComponent(selectedCategory)}`;
+      // No pagination, search, or category filtering in the backend
+      const url = `${apiUrl}/v1/product`;
 
       const response = await fetch(url);
 
@@ -99,14 +100,14 @@ const ProductList = () => {
         throw new Error(result.message || 'Failed to fetch product');
       }
 
-      setProductData(result.data);
-      setTotalPages(result.totalPages);
+      setProductData(result.data); // Store all products
+      setTotalPages(Math.ceil(result.data.length / itemsPerPage)); // Calculate pages based on frontend limit
     } catch (err) {
       setError(err.message);
     } finally {
       setLoading(false);
     }
-  };
+};
 
   useEffect(() => {
     fetchProduct();
@@ -182,26 +183,32 @@ const ProductList = () => {
 
       {/* product Table */}
       <Table
-        headers={headers}
-        data={productData.map((product) => ({
-          Product: product.item,
-          Category: product.category,
-          Quantity: product.quantity,
-          Price: product.price,
-          Actions: (
-            <div style={{ display: 'flex', gap: '10px' }}>
-              <FaRegEdit
-                style={{ cursor: 'pointer' }}
-                onClick={() => handleEdit(product)}
-              />
-              <MdDelete
-                style={{ cursor: 'pointer', color: 'red' }}
-                onClick={() => handleDelete(product)}
-              />
-            </div>
-          ),
-        }))}
-      />
+          headers={headers}
+          data={productData
+            .filter((product) => 
+              product.item.toLowerCase().includes(searchTerm.toLowerCase()) && // ✅ Search filter
+              (selectedCategory === "" || product.category === selectedCategory) // ✅ Category filter
+            )
+            .slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage) // ✅ Pagination after filtering
+            .map((product) => ({
+            Product: product.item,
+            Category: product.category,
+            Quantity: product.quantity,
+            Price: product.price,
+            Actions: (
+              <div style={{ display: 'flex', gap: '10px' }}>
+                <FaRegEdit
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => handleEdit(product)}
+                />
+                <MdDelete
+                  style={{ cursor: 'pointer', color: 'red' }}
+                  onClick={() => handleDelete(product)}
+                />
+              </div>
+            ),
+          }))}
+        />
 
       {/* Pagination Controls */}
       <PaginationControls>

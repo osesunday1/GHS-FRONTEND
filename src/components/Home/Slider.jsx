@@ -55,7 +55,7 @@ const SliderItem = styled.div`
   position: absolute;
   inset: 0 0 0 0;
   overflow: hidden;
-  opacity: ${(props) => (props.active ? 1 : 0)};
+  opacity: ${(props) => (props.$active ? 1 : 0)};
   transition: 0.5s;
 
   img {
@@ -163,7 +163,7 @@ const Thumbnail = styled.div`
 const ThumbnailItem = styled.div`
   width: 150px;
   height: 90%;
-  filter: brightness(${(props) => (props.active ? 1.5 : 0.5)});
+  filter: brightness(${(props) => (props.$active ? 1.5 : 0.5)});
   transition: 0.5s;
   flex-shrink: 0;
 
@@ -184,7 +184,7 @@ const ThumbnailItem = styled.div`
 `;
 
 const Slider = () => {
-  const [activeIndex, setActiveIndex] = useState(0); // State to keep track of the active index
+  const [activeIndex, setActiveIndex] = useState(); // State to keep track of the active index
 
   // useEffect to set up an interval for auto-sliding
   useEffect(() => {
@@ -224,9 +224,8 @@ const Slider = () => {
       {/* Thumbnails for each slider item */}
       <Thumbnail>
         {IMAGES.map((image, index) => (
-          <ThumbnailItem key={index} active={index === activeIndex} onClick={() => showSlider(index)}>
-            {/* Display the thumbnail image */}
-            <img src={image} alt={`Thumbnail ${index + 1}`} />
+          <ThumbnailItem key={index} $active={index === activeIndex} onClick={() => showSlider(index)}>
+          <img src={image} alt={`Thumbnail ${index + 1}`} />
           </ThumbnailItem>
         ))}
       </Thumbnail>

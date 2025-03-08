@@ -28,8 +28,8 @@ import ProductForm from './components/Product/ProductForm';
 import TimetableList from './components/Timetable/TimetableList';
 
 const StyledStructure = styled.div`
-  display: ${({ isLoggedIn }) => (isLoggedIn ? 'grid' : 'block')}; 
-  grid-template-columns: ${({ collapseSidebar }) => (collapseSidebar ? '100px 1fr' : '250px 1fr')};
+ display: ${({ $userLoggedIn }) => ($userLoggedIn ? 'grid' : 'block')};  
+  grid-template-columns: ${({ $collapseSidebar }) => ($collapseSidebar ? '100px 1fr' : '250px 1fr')};
   height: 100%;
   width: 100%;
   background-color: var(--white);
@@ -86,13 +86,16 @@ function App() {
 
   // Check if user is already logged in by retrieving token from localStorage
   useEffect(() => {
-    const storedData = JSON.parse(localStorage.getItem('userData'));
-    if (storedData && storedData.token && new Date(storedData.expiration) > new Date()
-
-    ) {
-      login(storedData.userId, storedData.token);
-    } else {
-      logout(); // Log out if the token is expired or invalid
+    try {
+      const storedData = JSON.parse(localStorage.getItem('userData'));
+      if (storedData && storedData.token && new Date(storedData.expiration) > new Date()) {
+        login(storedData.userId, storedData.token);
+      } else {
+        logout();
+      }
+    } catch (error) {
+      console.error("Error parsing userData from localStorage", error);
+      logout(); // Reset user state if parsing fails
     }
   }, [login, logout]);
 
@@ -165,7 +168,7 @@ function App() {
       <AuthContext.Provider value={{ isLoggedIn: !!token, token, userId, login, logout }}>
 
 
-        <StyledStructure isLoggedIn={!!token} collapseSidebar={collapseSidebar}>
+      <StyledStructure $userLoggedIn={!!token} $collapseSidebar={collapseSidebar}>
          
          {/*====================== sidebar =======================*/}
           {token && (

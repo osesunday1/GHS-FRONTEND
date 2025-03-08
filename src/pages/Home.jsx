@@ -13,7 +13,6 @@ const Home = () => {
   return (
     <StyledHome>
         <Header/>
-        <Slider/>
         <AboutSection1/>
         <Form/>
     </StyledHome>
