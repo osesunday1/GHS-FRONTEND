@@ -12,7 +12,7 @@ import Apartments from './pages/Apartments';
 import Product from './pages/Product';
 import styled from 'styled-components';
 import Inventory from './pages/Inventory';
-import InventoryForm from './components/inventory/InventoryForm';
+//import InventoryForm from './components/inventory/InventoryForm';
 import EditInventoryForm from './components/inventory/EditInventoryForm';
 import Expenses from './pages/Expenses';
 import ExpensesForm from './components/Expenses/ExpensesForm';
@@ -145,7 +145,7 @@ function App() {
         <Route path="/product" element={<Product />} />
         <Route path="/addProduct" element={<ProductForm />} />
         <Route path="/inventory" element={<Inventory />} />
-        <Route path="/addInventory" element={<InventoryForm />} />
+        {/*<Route path="/addInventory" element={<InventoryForm />} />*/}
         <Route path="/inventory/edit/:id" element={<EditInventoryForm />} />
         <Route path="/expenses" element={<Expenses />} />
         <Route path="/addExpenses" element={<ExpensesForm />} />
