@@ -4,7 +4,7 @@ import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import usePost from '../CustomHooks/usePost';
-import InventoryDropdown from './InventoryDropdown'
+
 const FormContainer = styled.div`
   max-width: 85%;
   margin: 0 auto;
@@ -23,7 +23,7 @@ const FormGrid = styled.div`
 
 const FormField = styled.div`
   margin-bottom: 15px;
-  grid-column: ${props => props.fullWidth ? 'span 2' : 'auto'};
+  grid-column: ${(props) => (props.fullWidth ? 'span 2' : 'auto')};
 `;
 
 const Label = styled.label`
@@ -61,6 +61,11 @@ const Button = styled.button`
   &:hover {
     background-color: #0056b3;
   }
+
+  &:disabled {
+    background-color: gray;
+    cursor: not-allowed;
+  }
 `;
 
 const Error = styled.div`
@@ -68,10 +73,8 @@ const Error = styled.div`
   margin-top: 10px;
 `;
 
-
 const InventoryForm = () => {
   const apiUrl = import.meta.env.VITE_BACKEND_URL;
-
   const { postData, loading, error } = usePost(`${apiUrl}/v1/inventory`);
 
   const initialFormData = {
@@ -82,27 +85,41 @@ const InventoryForm = () => {
   const [formData, setFormData] = useState(initialFormData);
   const [guests, setGuests] = useState([]);
   const [productItems, setProductItems] = useState([]);
-  const [error2, setError2] = useState(null);
+  const [productLoading, setProductLoading] = useState(true);
+  const [productError, setProductError] = useState(null);
 
   useEffect(() => {
+    let isMounted = true;
+
     const fetchGuestsAndProducts = async () => {
       try {
         const guestsResponse = await axios.get(`${apiUrl}/v1/guests`);
-        setGuests(guestsResponse.data.data);
-
         const productResponse = await axios.get(`${apiUrl}/v1/product`);
-        setProductItems(productResponse.data.data);
+
+        if (isMounted) {
+          setGuests(guestsResponse.data.data);
+          setProductItems(productResponse.data.data);
+          setProductLoading(false);
+        }
       } catch (err) {
-        toast.error('Failed to load guests or inventory items.');
-        setError2('Failed to load guests or inventory items. Please try again.');
+        if (isMounted) {
+          setProductError('Failed to load guests or inventory items. Please try again.');
+          setProductLoading(false);
+        }
       }
     };
+
     fetchGuestsAndProducts();
-  }, []);
+
+    return () => {
+      isMounted = false; // Cleanup function to prevent memory leaks
+    };
+  }, [apiUrl]);
 
   const handleItemChange = (index, e) => {
     const updatedItems = [...formData.items];
-    updatedItems[index][e.target.name] = e.target.value;
+    updatedItems[index][e.target.name] =
+      e.target.name === 'quantity' ? Number(e.target.value) : e.target.value;
     setFormData({ ...formData, items: updatedItems });
   };
 
@@ -125,8 +142,28 @@ const InventoryForm = () => {
     });
   };
 
+  const validateForm = () => {
+    if (!formData.guestId) {
+      toast.error('Please select a guest.');
+      return false;
+    }
+    for (const item of formData.items) {
+      if (!item.productItemId) {
+        toast.error('Please select a product for each item.');
+        return false;
+      }
+      if (item.quantity < 1) {
+        toast.error('Quantity must be at least 1.');
+        return false;
+      }
+    }
+    return true;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!validateForm()) return;
+
     const result = await postData(formData);
     if (result) {
       toast.success('Inventory added successfully!');
@@ -141,12 +178,7 @@ const InventoryForm = () => {
         <FormGrid>
           <FormField fullWidth>
             <Label>Guest</Label>
-            <Select
-              name="guestId"
-              value={formData.guestId}
-              onChange={handleChange}
-              required
-            >
+            <Select name="guestId" value={formData.guestId} onChange={handleChange} required>
               <option value="">Select a Guest</option>
               {guests.map((guest) => (
                 <option key={guest._id} value={guest._id}>
@@ -157,30 +189,47 @@ const InventoryForm = () => {
           </FormField>
 
           {formData.items.map((item, index) => (
-  <div key={index}>
-    <InventoryDropdown
-      item={item}
-      index={index}
-      handleItemChange={handleItemChange}
-    />
-    <FormField>
-      <Label>Quantity</Label>
-      <Input
-        type="number"
-        name="quantity"
-        value={item.quantity}
-        onChange={(e) => handleItemChange(index, e)}
-        min="1"
-        required
-      />
-    </FormField>
-    {formData.items.length > 1 && (
-      <Button type="button" onClick={() => handleRemoveItem(index)}>
-        Remove Item
-      </Button>
-    )}
-  </div>
-))}
+            <div key={index}>
+              <FormField>
+                <Label>Inventory Item</Label>
+                {productLoading ? (
+                  <div>Loading products...</div>
+                ) : productError ? (
+                  <div>Error: {productError}</div>
+                ) : (
+                  <Select
+                    name="productItemId"
+                    value={item.productItemId}
+                    onChange={(e) => handleItemChange(index, e)}
+                    required
+                  >
+                    <option value="">Select an Item</option>
+                    {productItems.map((productItem) => (
+                      <option key={productItem._id} value={productItem._id}>
+                        {productItem.item} - #{productItem.price.toLocaleString()}
+                      </option>
+                    ))}
+                  </Select>
+                )}
+              </FormField>
+              <FormField>
+                <Label>Quantity</Label>
+                <Input
+                  type="number"
+                  name="quantity"
+                  value={item.quantity}
+                  onChange={(e) => handleItemChange(index, e)}
+                  min="1"
+                  required
+                />
+              </FormField>
+              {formData.items.length > 1 && (
+                <Button type="button" onClick={() => handleRemoveItem(index)}>
+                  Remove Item
+                </Button>
+              )}
+            </div>
+          ))}
 
           <FormField fullWidth>
             <Button type="button" onClick={handleAddItem}>
@@ -188,7 +237,9 @@ const InventoryForm = () => {
             </Button>
           </FormField>
         </FormGrid>
-        <Button type="submit">{loading ? 'Adding..' : 'Add Inventory'}</Button>
+        <Button type="submit" disabled={loading}>
+          {loading ? 'Adding..' : 'Add Inventory'}
+        </Button>
         {error && <Error>{error}</Error>}
       </form>
     </FormContainer>
