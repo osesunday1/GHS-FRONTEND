@@ -69,7 +69,6 @@ const MonthlyRevenueCard = () => {
         );
         if (!response.ok) throw new Error("Failed to fetch data");
         const result = await response.json();
-        console.log("Fetched data:", result); // Debug log
         setData(result.data);
       } catch (err) {
         console.error("Error fetching monthly revenue:", err.message); // Debug log
